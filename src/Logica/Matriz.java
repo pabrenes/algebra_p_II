@@ -32,27 +32,27 @@ public class Matriz {
      * @return Fracion[][] La matriz actual en forma escalonada reducida
      */
     public Fraccion[][] matrizEscalonada() {
-        Fraccion[][] escalonada = copiarMatriz();
+        Fraccion[][] escalonada = copiarMatriz();                                                                       //Se trabaja sobre una copia
         int columnaActual = 0;
         boolean flag;
 
-        for (int i = 0; i < filas; i++) {
-            if (columnaActual >= columnas) break;
-            while (columnaActual <= columnas - 1 && escalonada[i][columnaActual].equals(FRACCION_CERO)) {
-                flag = isDeadColum(escalonada, i, columnaActual);
-                if (flag) columnaActual++;
+        for (int i = 0; i < filas; i++) {                                                                               //Debo avanzar fila a fila, aplicando la reducción a una misma columna en todas las filas
+            if (columnaActual >= columnas) break;                                                                       //Puede que haya menos variables que ecuaciones
+            while (columnaActual <= columnas - 1 && escalonada[i][columnaActual].equals(FRACCION_CERO)) {               //Mientras no sobrepase el límite de columnas y mi entrada actual no sea cero puedo reducir las dmeás columnas
+                flag = isDeadColum(escalonada, i, columnaActual);                                                       //Si la columna quedó en ceros al menos desde la fila actual hacia abajo, o está reducida, o la variable no posee más información
+                if (flag) columnaActual++;                                                                              //Si la variable no me aporta más información, debo reducir en la siguiente y olvidarme de la actual
             }
-            if (columnaActual >= columnas) break;
-            multiplicarFila(escalonada, Fraccion.invertir(escalonada[i][columnaActual]), i);
-            for (int j = 0; j < filas; j++) {
-                if (j != i && !escalonada[j][columnaActual].equals(FRACCION_CERO)) {
+            if (columnaActual >= columnas) break;                                                                       //Se valida lo mismo dos veces, pero el bloque de código anterior es posible que altere la columna actual
+            multiplicarFila(escalonada, Fraccion.invertir(escalonada[i][columnaActual]), i);                            //Si encontré una entrada diferente a cero, debo convertirla en un uno, por eso se multiplica por su inversa
+            for (int j = 0; j < filas; j++) {                                                                           //Una vez tengo un uno en la entrada, debo formar ceros hacia abajo y arriba de la columna en que me encuentro
+                if (j != i && !escalonada[j][columnaActual].equals(FRACCION_CERO)) {                                    //Es importante no aplicar el proceso en la misma fila actual y se evita aplicar el proceso si ya era cero la entrada
                     sumarFilas(escalonada, Fraccion.multiplicar(
-                            escalonada[j][columnaActual], FRACCION_NEGATIVA), i, j);
+                            escalonada[j][columnaActual], FRACCION_NEGATIVA), i, j);                                    //Se aplica la resta para formar un cero
                 }
             }
-            columnaActual++;
+            columnaActual++;                                                                                            //Naturalmente al procesar por completo una columna en una fila, avanzo a la siguiente, por eso la validación al inicio del for
         }
-        return escalonada;
+        return escalonada;                                                                                              //Se regresa la matriz de la forma más reducida posible
     }
 
     /**
@@ -145,6 +145,9 @@ public class Matriz {
         }
     }
 
+    /**
+     * Envía la matriz en formato de String a la consola
+     */
     public void print() {
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
