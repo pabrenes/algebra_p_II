@@ -163,4 +163,31 @@ public class Fraccion {
         return denominador;
     }
 
+    /**
+     * Se encarga de retornar una nueva Fraccion en base en la actual
+     *
+     * @return Fraccion, copia de la fraccion actual
+     */
+    @Override
+    public Fraccion clone() {
+        return simplificar(this);
+    }
+
+    /**
+     * Función que determina si dos fracciones son iguales
+     * @param fraccion Fracción a determinar su igualdad con la actual
+     * @return Boleean, iguales ? true : false
+     */
+    public boolean equals(Fraccion fraccion) {
+        return (fraccion.getNumerador() == numerador && fraccion.getDenominador() == denominador);
+    }
+
+    /**
+     * Metodo que convierte la información de la fracción a un String
+     * @return String, fracción en string
+     */
+    @Override
+    public String toString() {
+        return numerador + "/" + denominador;
+    }
 }
