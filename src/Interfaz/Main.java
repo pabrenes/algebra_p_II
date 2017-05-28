@@ -1,5 +1,7 @@
 package Interfaz;
 
+import Logica.Fraccion;
+import Logica.Matriz;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,7 +23,23 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
+        //launch(args);
+
+        Fraccion[][] matriz = {
+                {new Fraccion(7, 3), new Fraccion(0, 1), new Fraccion(1, 1)},
+                {new Fraccion(1, 1), new Fraccion(0, 1), new Fraccion(0, 1)},
+                {new Fraccion(7, 1), new Fraccion(0, 3), new Fraccion(46, 7)}
+        };
+
+        Matriz matrix = new Matriz(matriz);
+        matrix.print();
+        Fraccion[][] escalonada = matrix.matrizEscalonada();
+        Matriz matrixEscalonada = new Matriz(escalonada);
+        System.out.println();
+        matrixEscalonada.print();
+
+
+
     }
 
 }

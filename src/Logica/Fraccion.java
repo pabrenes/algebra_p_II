@@ -27,7 +27,7 @@ public class Fraccion {
      * @param operando2 Fracción a sumar
      * @return Fraccion, valores de las fracciones sumadas y simplificadas
      */
-    public static Fraccion sumar(Fraccion operando1, Fraccion operando2) {
+    static Fraccion sumar(Fraccion operando1, Fraccion operando2) {
         long numeradorResultado;
         long denominadorResultado;
 
@@ -44,36 +44,13 @@ public class Fraccion {
     }
 
     /**
-     * Resta dos fracciones dadas
-     *
-     * @param minuendo   Minuendo de la resta
-     * @param sustraendo Sustraendo de la resta
-     * @return Fraccion, valores de las fracciones sumadas y simplificadas
-     */
-    public static Fraccion restar(Fraccion minuendo, Fraccion sustraendo) {
-        long numeradorResultado;
-        long denominadorResultado;
-
-        if (minuendo.denominador == sustraendo.denominador) {
-            numeradorResultado = minuendo.numerador - sustraendo.numerador;
-            denominadorResultado = minuendo.denominador;
-        } else {
-            numeradorResultado = (minuendo.numerador * sustraendo.denominador) -
-                    (sustraendo.numerador * minuendo.denominador);
-            denominadorResultado = minuendo.denominador * sustraendo.denominador;
-        }
-
-        return simplificar(new Fraccion(numeradorResultado, denominadorResultado));
-    }
-
-    /**
      * Multiplica dos fracciones dadas
      *
      * @param operando1 Fraccion a multiplicar
      * @param operando2 Fraccion a multiplicar
      * @return Fraccion, valores de las fracciones multiplicados y simplicados
      */
-    public static Fraccion multiplicar(Fraccion operando1, Fraccion operando2) {
+    static Fraccion multiplicar(Fraccion operando1, Fraccion operando2) {
         long numeradorResultado = operando1.numerador * operando2.numerador;
         long denominadorResultado = operando1.denominador * operando2.denominador;
 
@@ -86,7 +63,7 @@ public class Fraccion {
      * @param fraccion Fraccion a cacular inversa
      * @return Fraccion, inversa de la fracción simplificada
      */
-    public static Fraccion invertir(Fraccion fraccion) {
+    static Fraccion invertir(Fraccion fraccion) {
         return simplificar(new Fraccion(fraccion.denominador, fraccion.numerador));
     }
 
@@ -98,7 +75,7 @@ public class Fraccion {
      * @param fraccion fracción que debe ser simplificada
      * @return Fracción, con valores simplificados y signos estandarizados
      */
-    public static Fraccion simplificar(Fraccion fraccion) {
+    private static Fraccion simplificar(Fraccion fraccion) {
         if (fraccion.numerador == 0) {
             return new Fraccion(0, 1);
         } else {
@@ -150,7 +127,7 @@ public class Fraccion {
      *
      * @return Long, numerador de la fracción
      */
-    public long getNumerador() {
+    private long getNumerador() {
         return numerador;
     }
 
@@ -159,7 +136,7 @@ public class Fraccion {
      *
      * @return Long, denominador de la Fracción
      */
-    public long getDenominador() {
+    private long getDenominador() {
         return denominador;
     }
 
@@ -168,8 +145,7 @@ public class Fraccion {
      *
      * @return Fraccion, copia de la fraccion actual
      */
-    @Override
-    public Fraccion clone() {
+    Fraccion copiarFraccion() {
         return simplificar(this);
     }
 
@@ -178,7 +154,7 @@ public class Fraccion {
      * @param fraccion Fracción a determinar su igualdad con la actual
      * @return Boleean, iguales ? true : false
      */
-    public boolean equals(Fraccion fraccion) {
+    boolean equals(Fraccion fraccion) {
         return (fraccion.getNumerador() == numerador && fraccion.getDenominador() == denominador);
     }
 
