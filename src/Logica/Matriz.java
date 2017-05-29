@@ -50,7 +50,7 @@ public class Matriz {
                 diagonalActual++;                                                                                       //No me moví en la real, cree una nueva columna, pero sí en la nueva cuadrada
             }
         }
-                                                                                                                        //A este punto ya existe una matriz cuadrada con las variables de solución vamos a procesar las independientes
+        //A este punto ya existe una matriz cuadrada con las variables de solución vamos a procesar las independientes
         for (int i = 0; i < columnas; i++) {                                                                            //Para cada nueva fila de la matriz normalizada
             if (columnaIndependiente(matrizNormalizada[i], i)) {                                                        //Si una variable es independiente
                 independientes.add(i);                                                                                  //guarde el índice de columna de este

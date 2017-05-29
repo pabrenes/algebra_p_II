@@ -1,7 +1,5 @@
 package Interfaz;
 
-import Logica.Fraccion;
-import Logica.Matriz;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,24 +17,12 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("Interfaz.fxml"));
         primaryStage.setTitle("Tarea Programada 2 - Álgebra Lineal para Computación");
         primaryStage.setScene(new Scene(root));
+        //primaryStage.setResizable(false);
         primaryStage.show();
     }
 
     public static void main(String[] args) {
-        //launch(args);
-
-        Fraccion[][] matriz = {
-                {new Fraccion(1, 1), new Fraccion(2, 1), new Fraccion(3, 1), new Fraccion(4, 1)},
-                {new Fraccion(4, 1), new Fraccion(3, 1), new Fraccion(2, 1), new Fraccion(1, 1)}
-        };
-
-        Matriz matrix = new Matriz(matriz);
-        matrix.print();
-        System.out.println("---------------------------");
-        Matriz nueva = new Matriz (matrix.espacioDeSolucion());
-        nueva.print();
-
-
+        launch(args);
 
     }
 

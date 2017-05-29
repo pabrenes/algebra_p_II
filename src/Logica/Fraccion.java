@@ -127,7 +127,7 @@ public class Fraccion {
      *
      * @return Long, numerador de la fracción
      */
-    private long getNumerador() {
+    public long getNumerador() {
         return numerador;
     }
 
@@ -136,7 +136,7 @@ public class Fraccion {
      *
      * @return Long, denominador de la Fracción
      */
-    private long getDenominador() {
+    public long getDenominador() {
         return denominador;
     }
 
@@ -151,6 +151,7 @@ public class Fraccion {
 
     /**
      * Función que determina si dos fracciones son iguales
+     *
      * @param fraccion Fracción a determinar su igualdad con la actual
      * @return Boleean, iguales ? true : false
      */
@@ -160,6 +161,7 @@ public class Fraccion {
 
     /**
      * Metodo que convierte la información de la fracción a un String
+     *
      * @return String, fracción en string
      */
     @Override
