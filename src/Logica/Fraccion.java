@@ -145,7 +145,7 @@ public class Fraccion {
      *
      * @return Fraccion, copia de la fraccion actual
      */
-    Fraccion copiarFraccion() {
+    Fraccion copiarFraccionConArreglo() {
         return simplificar(this);
     }
 

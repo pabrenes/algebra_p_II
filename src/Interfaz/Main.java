@@ -8,6 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 /**
  * Created by Pablo Brenes 2016250460
  * 27 may 2017.
@@ -26,17 +28,15 @@ public class Main extends Application {
         //launch(args);
 
         Fraccion[][] matriz = {
-                {new Fraccion(7, 3), new Fraccion(0, 1), new Fraccion(1, 1)},
-                {new Fraccion(1, 1), new Fraccion(0, 1), new Fraccion(0, 1)},
-                {new Fraccion(7, 1), new Fraccion(0, 3), new Fraccion(46, 7)}
+                {new Fraccion(1, 1), new Fraccion(2, 1), new Fraccion(3, 1), new Fraccion(4, 1)},
+                {new Fraccion(4, 1), new Fraccion(3, 1), new Fraccion(2, 1), new Fraccion(1, 1)}
         };
 
         Matriz matrix = new Matriz(matriz);
         matrix.print();
-        Fraccion[][] escalonada = matrix.matrizEscalonada();
-        Matriz matrixEscalonada = new Matriz(escalonada);
-        System.out.println();
-        matrixEscalonada.print();
+        System.out.println("---------------------------");
+        Matriz nueva = new Matriz (matrix.espacioDeSolucion());
+        nueva.print();
 
 
 
