@@ -34,6 +34,12 @@ public class ControladorTransformacionesLineales implements Initializable{
 
     private int tamannoMaximoPlano = 340;
 
+    /**
+     * Función que se autoejecuta en la creación de esta pantalla
+     *
+     * @param location  Localizaciión para obtener el path relativo a la raíz del objeto
+     * @param resources Recursos necesarios para encontrar la raíz del objeto
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         dibujarPlano(paneSuperiorIzquierdo);
@@ -42,6 +48,11 @@ public class ControladorTransformacionesLineales implements Initializable{
         dibujarPlano(paneInferiorDerecho);
     }
 
+    /**
+     * Dibuja los ejes principales y secundarios de un plano cartesiano sobre el pane ingresado
+     *
+     * @param grafica Pane sobre el cual se dibujaran los ejes
+     */
     public void dibujarPlano(Pane grafica){
         for(int i = 0; i <= tamannoMaximoPlano; i += tamannoMaximoPlano / 10){
             Line lineaVertical = new Line();
