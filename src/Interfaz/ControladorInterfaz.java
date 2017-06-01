@@ -22,7 +22,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by Pablo Brenes 2016250460
+ * Created by Pablo Brenes (El gay del grupo) 2016250460
  * 27 may 2017.
  */
 public class ControladorInterfaz implements Initializable {
