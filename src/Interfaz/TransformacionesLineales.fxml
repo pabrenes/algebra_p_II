@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="617.0" prefWidth="914.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Interfaz.ControladorTransformacionesLineales">
+   <children>
+      <GridPane hgap="10.0" layoutX="26.0" layoutY="1.0" prefHeight="700.0" prefWidth="700.0" vgap="10.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Pane fx:id="paneSuperiorIzquierdo" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Label text="Vectores u y v" />
+               </children></Pane>
+            <Pane fx:id="paneSuperiorDerecho" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+               <children>
+                  <Label text="Vectores T(u) y T(v)" />
+               </children></Pane>
+            <Pane fx:id="paneInferiorIzquierdo" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+               <children>
+                  <Label layoutY="6.0" text="Vectores au, bv y au + bv" />
+               </children></Pane>
+            <Pane fx:id="paneInferiorDerecho" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <Label layoutY="6.0" text="Vectores T(au), T(bv) y T(au + bv)" />
+               </children></Pane>
+         </children>
+         <opaqueInsets>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </opaqueInsets>
+      </GridPane>
+      <HBox alignment="CENTER" layoutX="84.0" layoutY="-173.0" prefHeight="66.0" prefWidth="900.0" spacing="45.0" />
+      <VBox alignment="CENTER" layoutX="763.0" layoutY="124.0" prefHeight="244.0" prefWidth="150.0" spacing="50.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="37.0" prefWidth="68.0">
+               <children>
+                  <Label alignment="CENTER" text="a = ">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField prefHeight="29.0" prefWidth="28.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="37.0" prefWidth="68.0">
+               <children>
+                  <Label alignment="CENTER" text="b = ">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField prefHeight="29.0" prefWidth="28.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="37.0" prefWidth="116.0">
+               <children>
+                  <Label alignment="CENTER" text="u = (">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField prefHeight="29.0" prefWidth="28.0" />
+                  <Label text=",">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField prefHeight="29.0" prefWidth="28.0" />
+                  <Label text=")">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="37.0" prefWidth="116.0">
+               <children>
+                  <Label alignment="CENTER" text="v = (">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField prefHeight="29.0" prefWidth="28.0" />
+                  <Label text=",">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField prefHeight="29.0" prefWidth="28.0" />
+                  <Label text=")">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="70.0" prefWidth="155.0">
+               <children>
+                  <Label text="T = ">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_CENTER" prefHeight="36.0" prefWidth="22.0" text="(">
+                     <font>
+                        <Font size="48.0" />
+                     </font>
+                  </Label>
+                  <VBox prefHeight="71.0" prefWidth="61.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                           <children>
+                              <TextField prefHeight="29.0" prefWidth="28.0" />
+                              <TextField prefHeight="29.0" prefWidth="28.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                           <children>
+                              <TextField prefHeight="29.0" prefWidth="28.0" />
+                              <TextField prefHeight="29.0" prefWidth="28.0" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <Label alignment="CENTER" prefHeight="36.0" prefWidth="22.0" text=")">
+                     <font>
+                        <Font size="48.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <Button mnemonicParsing="false" text="Calcular y Graficar" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
