@@ -3,15 +3,21 @@ package Interfaz;
 import Logica.Fraccion;
 import Logica.Matriz;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
+import javax.swing.*;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -43,6 +49,8 @@ public class ControladorInterfaz implements Initializable {
     @FXML
     public Button btnLimpiar;
     @FXML
+    public Button btnVolver;
+    @FXML
     public GridPane gridPaneSistema;
     @FXML
     public GridPane gridPaneSolucion;
@@ -67,6 +75,10 @@ public class ControladorInterfaz implements Initializable {
         configurarMenuFilas();
         configurarMenuColumnas();
         btnResolver.setOnAction(event -> resolver());
+        btnLimpiar.setOnAction(event -> limpiar());
+        btnVolver.setOnAction(event -> {
+            volver();
+        });
     }
 
     /**
@@ -210,35 +222,75 @@ public class ControladorInterfaz implements Initializable {
     private Fraccion capturarEntrada(VBox vBox) {
         TextField entradaNumerador = (TextField) vBox.getChildren().get(0);
         TextField entradaDenominador = (TextField) vBox.getChildren().get(2);
-
-        return new Fraccion(Integer.parseInt(entradaNumerador.getText()),
-                Integer.parseInt(entradaDenominador.getText()));
+        int numerador;
+        int denominador;
+        try{
+            numerador = Integer.parseInt(entradaNumerador.getText());
+            denominador = Integer.parseInt(entradaDenominador.getText());
+            if (denominador == 0){
+                JOptionPane.showMessageDialog(null, "No es posible la división entre cero", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+            return new Fraccion(numerador, denominador);
+        }catch(NumberFormatException nfe){
+            JOptionPane.showMessageDialog(null, "La entrada no es válida", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        return null;
     }
 
     /**
      * Obtiene los datos ingresados por el usuario para construir la matriz del sistema
      */
-    private void construirSistema() {
+    private boolean construirSistema() {
         Fraccion[][] matriz = new Fraccion[filas][columnas];
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 int index = columnas * i + j;
                 HBox hBox = (HBox) gridPaneSistema.getChildren().get(index);
-                matriz[i][j] = capturarEntrada((VBox) hBox.getChildren().get(0));
+                Fraccion fraccion = capturarEntrada((VBox) hBox.getChildren().get(0));
+                if (fraccion == null)
+                    return false;
+                matriz[i][j] = fraccion;
             }
         }
         sistema = new Matriz(matriz);
+        return true;
     }
 
     /**
      * Trabajo para el botón resolver, determina la solución y se la prensenta al usuario
      */
     private void resolver() {
-        construirSistema();
+        if (!construirSistema())
+            return;
         sistema.print();
         Fraccion[][] solucion = sistema.espacioDeSolucion();
         Matriz akdfl = new Matriz(solucion);
         akdfl.print();
         construirSolucion(solucion);
+    }
+
+    private void limpiar() {
+        gridPaneSistema.getChildren().clear();
+        construirMatriz();
+        gridPaneSolucion.getChildren().clear();
+    }
+
+    private void volver() {
+        Stage escenario = new Stage();
+        FXMLLoader loader = new FXMLLoader();
+        Parent raiz = null;                                                                                              //Se crean estos tres objetos
+        try {
+            raiz = loader.load(getClass().getResource("Inicio.fxml").openStream());                           //Con esto se indica el FXML de la nueva ventana
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ControladorInicio controlador = (ControladorInicio) loader.getController();                            //Se instancia el controlador respectivo, se debe hacer un casting para que funcione.
+        escenario.setTitle("Bases y dimensión de un sistema homogéneo de ecuaciones lineales");
+        escenario.setScene(new Scene(raiz));
+        escenario.show();
+
+        Stage temporal = (Stage) btnVolver.getScene().getWindow();                                             //Se obtiene el stage al que pertenece el boton que abre la nueva ventana para poder cerrarla
+        temporal.close();
     }
 }

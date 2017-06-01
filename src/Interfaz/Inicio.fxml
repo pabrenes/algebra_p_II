@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="387.0" prefWidth="331.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Interfaz.ControladorInicio">
+   <children>
+      <VBox layoutX="32.0" prefHeight="400.0" prefWidth="261.0">
+         <children>
+            <Button fx:id="btn1" mnemonicParsing="false" prefHeight="126.0" prefWidth="261.0" text="Bases y dimensión de un sistema homogéneo" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+            <Button fx:id="btn2" mnemonicParsing="false" prefHeight="135.0" prefWidth="261.0" text="Visualización de vectores y transformaciones lineales" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </Button>
+            <Button fx:id="btn3" mnemonicParsing="false" prefHeight="121.0" prefWidth="261.0" text="Transformaciones aplicadas a imagenes digitales" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
+   </children>
+</Pane>
