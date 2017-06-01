@@ -54,7 +54,7 @@ public class ControladorTransformacionesLineales implements Initializable{
      * @param grafica Pane sobre el cual se dibujaran los ejes
      */
     public void dibujarPlano(Pane grafica){
-        for(int i = 0; i <= tamannoMaximoPlano; i += tamannoMaximoPlano / 10){
+        for(int i = 0; i <= tamannoMaximoPlano; i += tamannoMaximoPlano / 20){
             Line lineaVertical = new Line();
             grafica.getChildren().addAll(lineaVertical);
             lineaVertical.setStartX(i);

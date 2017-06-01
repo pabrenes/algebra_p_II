@@ -22,88 +22,99 @@
          <children>
             <Pane fx:id="paneSuperiorIzquierdo" prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <Label text="Vectores u y v" />
+                  <Label layoutX="14.0" layoutY="6.0" text="Vectores u y v" />
                </children></Pane>
             <Pane fx:id="paneSuperiorDerecho" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                <children>
-                  <Label text="Vectores T(u) y T(v)" />
+                  <Label layoutX="14.0" layoutY="6.0" text="Vectores T(u) y T(v)" />
                </children></Pane>
             <Pane fx:id="paneInferiorIzquierdo" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                <children>
-                  <Label layoutY="6.0" text="Vectores au, bv y au + bv" />
+                  <Label layoutX="14.0" layoutY="6.0" text="Vectores αu, βv y αu + βv" />
                </children></Pane>
             <Pane fx:id="paneInferiorDerecho" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <Label layoutY="6.0" text="Vectores T(au), T(bv) y T(au + bv)" />
+                  <Label layoutX="14.0" layoutY="6.0" text="Vectores T(αu), T(βv) y T(αu + βv)" />
                </children></Pane>
          </children>
          <opaqueInsets>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </opaqueInsets>
       </GridPane>
-      <HBox alignment="CENTER" layoutX="84.0" layoutY="-173.0" prefHeight="66.0" prefWidth="900.0" spacing="45.0" />
-      <VBox alignment="CENTER" layoutX="763.0" layoutY="124.0" prefHeight="244.0" prefWidth="150.0" spacing="50.0">
+      <VBox alignment="CENTER" layoutX="726.0" layoutY="1.0" prefHeight="700.0" prefWidth="188.0" spacing="30.0">
          <children>
-            <HBox alignment="CENTER" prefHeight="37.0" prefWidth="68.0">
+            <HBox>
                <children>
-                  <Label alignment="CENTER" text="a = ">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <TextField prefHeight="29.0" prefWidth="28.0" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="37.0" prefWidth="68.0">
-               <children>
-                  <Label alignment="CENTER" text="b = ">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <TextField prefHeight="29.0" prefWidth="28.0" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="37.0" prefWidth="116.0">
-               <children>
-                  <Label alignment="CENTER" text="u = (">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <TextField prefHeight="29.0" prefWidth="28.0" />
-                  <Label text=",">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <TextField prefHeight="29.0" prefWidth="28.0" />
-                  <Label text=")">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="37.0" prefWidth="116.0">
-               <children>
-                  <Label alignment="CENTER" text="v = (">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <TextField prefHeight="29.0" prefWidth="28.0" />
-                  <Label text=",">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <TextField prefHeight="29.0" prefWidth="28.0" />
-                  <Label text=")">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
+                  <VBox alignment="CENTER" layoutX="540.0" layoutY="-101.0" spacing="20.0">
+                     <children>
+                        <HBox alignment="CENTER" layoutX="669.0" layoutY="-101.0" prefHeight="37.0" prefWidth="68.0">
+                           <children>
+                              <Label alignment="CENTER" text="α = ">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField prefHeight="29.0" prefWidth="28.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="540.0" layoutY="-70.0" prefHeight="37.0" prefWidth="68.0">
+                           <children>
+                              <Label alignment="CENTER" text="β = ">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField prefHeight="29.0" prefWidth="28.0" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox layoutX="386.0" layoutY="-107.0" spacing="20.0">
+                     <children>
+                        <HBox alignment="CENTER" layoutX="386.0" layoutY="-107.0" prefHeight="37.0" prefWidth="116.0">
+                           <children>
+                              <Label alignment="CENTER" text="u = (">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField prefHeight="29.0" prefWidth="28.0" />
+                              <Label text=",">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField prefHeight="29.0" prefWidth="28.0" />
+                              <Label text=")">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="750.0" layoutY="-105.0" prefHeight="37.0" prefWidth="116.0">
+                           <children>
+                              <Label alignment="CENTER" text="v = (">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField prefHeight="29.0" prefWidth="28.0" />
+                              <Label text=",">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField prefHeight="29.0" prefWidth="28.0" />
+                              <Label text=")">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="70.0" prefWidth="155.0">
