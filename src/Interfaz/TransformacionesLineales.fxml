@@ -54,7 +54,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <TextField prefHeight="29.0" prefWidth="28.0" />
+                              <TextField fx:id="entradaAlfa" prefHeight="29.0" prefWidth="28.0" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" layoutX="540.0" layoutY="-70.0" prefHeight="37.0" prefWidth="68.0">
@@ -64,7 +64,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <TextField prefHeight="29.0" prefWidth="28.0" />
+                              <TextField fx:id="entradaBeta" prefHeight="29.0" prefWidth="28.0" />
                            </children>
                         </HBox>
                      </children>
@@ -78,13 +78,13 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <TextField prefHeight="29.0" prefWidth="28.0" />
+                              <TextField fx:id="entradaU1" prefHeight="29.0" prefWidth="28.0" />
                               <Label text=",">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <TextField prefHeight="29.0" prefWidth="28.0" />
+                              <TextField fx:id="entradaU2" prefHeight="29.0" prefWidth="28.0" />
                               <Label text=")">
                                  <font>
                                     <Font size="18.0" />
@@ -99,13 +99,13 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <TextField prefHeight="29.0" prefWidth="28.0" />
+                              <TextField fx:id="entradaV1" prefHeight="29.0" prefWidth="28.0" />
                               <Label text=",">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <TextField prefHeight="29.0" prefWidth="28.0" />
+                              <TextField fx:id="entradaV2" prefHeight="29.0" prefWidth="28.0" />
                               <Label text=")">
                                  <font>
                                     <Font size="18.0" />
@@ -133,14 +133,14 @@
                      <children>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
                            <children>
-                              <TextField prefHeight="29.0" prefWidth="28.0" />
-                              <TextField prefHeight="29.0" prefWidth="28.0" />
+                              <TextField fx:id="entradaT11" prefHeight="29.0" prefWidth="28.0" text="1" />
+                              <TextField fx:id="entradaT12" prefHeight="29.0" prefWidth="28.0" text="0" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
                            <children>
-                              <TextField prefHeight="29.0" prefWidth="28.0" />
-                              <TextField prefHeight="29.0" prefWidth="28.0" />
+                              <TextField fx:id="entradaT21" prefHeight="29.0" prefWidth="28.0" text="0" />
+                              <TextField fx:id="entradaT22" prefHeight="29.0" prefWidth="28.0" text="1" />
                            </children>
                         </HBox>
                      </children>
@@ -152,7 +152,7 @@
                   </Label>
                </children>
             </HBox>
-            <Button mnemonicParsing="false" text="Calcular y Graficar" />
+            <Button fx:id="botonCalcularGraficar" mnemonicParsing="false" text="Calcular y Graficar" />
          </children>
       </VBox>
    </children>

@@ -122,7 +122,7 @@ public class Matriz {
             if (columnaActual >= columnas)
                 break;                                                                       //Puede que haya menos variables que ecuaciones
             while (columnaActual <= columnas - 1 && escalonada[i][columnaActual].equals(FRACCION_CERO)) {               //Mientras no sobrepase el límite de columnas y mi entrada actual no sea cero puedo reducir las dmeás columnas
-                flag = isDeadColum(escalonada, i, columnaActual);                                                       //Si la columna quedó en ceros al menos desde la fila actual hacia abajo, o está reducida, o la variable no posee más información
+                flag = isDeadColumn(escalonada, i, columnaActual);                                                       //Si la columna quedó en ceros al menos desde la fila actual hacia abajo, o está reducida, o la variable no posee más información
                 if (flag)
                     columnaActual++;                                                                              //Si la variable no me aporta más información, debo reducir en la siguiente y olvidarme de la actual
             }
@@ -150,7 +150,7 @@ public class Matriz {
      * @param columna columna sobre la que se está trabjando en el proceso de reducción
      * @return Boleean, en caso de que la columna de esa matriz pueda ser intercambiada con otra ? false | true
      */
-    private boolean isDeadColum(Fraccion[][] matriz, int fila, int columna) {
+    private boolean isDeadColumn(Fraccion[][] matriz, int fila, int columna) {
         if (fila != filas - 1) {
             for (int j = fila + 1; j < filas; j++) {
                 if (!matriz[j][columna].equals(FRACCION_CERO)) {
