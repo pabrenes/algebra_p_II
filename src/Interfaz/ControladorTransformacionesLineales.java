@@ -2,7 +2,6 @@ package Interfaz;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -29,10 +28,8 @@ public class ControladorTransformacionesLineales implements Initializable{
     @FXML
     public Pane paneInferiorDerecho;
 
-    @FXML
-    public GridPane cuadrillaPlanos;
-
-    private int tamannoMaximoPlano = 340;
+    private static final int TAMANO_MAXIMO_PLANO = 340; // Tamanno maximo en pixeles de los panes, se asume que los
+                                                        // panes son cuadrados.
 
     /**
      * Función que se autoejecuta en la creación de esta pantalla
@@ -46,6 +43,17 @@ public class ControladorTransformacionesLineales implements Initializable{
         dibujarPlano(paneSuperiorDerecho);
         dibujarPlano(paneInferiorIzquierdo);
         dibujarPlano(paneInferiorDerecho);
+
+        /*Line lineaPrueba = new Line();
+        paneSuperiorIzquierdo.getChildren().addAll(lineaPrueba);
+        lineaPrueba.setStartX(170.0f);
+        lineaPrueba.setStartY(170.0f);
+        lineaPrueba.setEndX(280.0f);
+        lineaPrueba.setEndY(340.0f);
+        lineaPrueba.setStrokeWidth(3.0f);
+        lineaPrueba.setStroke(Color.GREEN);
+
+        //paneSuperiorIzquierdo.getChildren().addAll(lineaPrueba);*/
     }
 
     /**
@@ -54,24 +62,24 @@ public class ControladorTransformacionesLineales implements Initializable{
      * @param grafica Pane sobre el cual se dibujaran los ejes
      */
     public void dibujarPlano(Pane grafica){
-        for(int i = 0; i <= tamannoMaximoPlano; i += tamannoMaximoPlano / 20){
+        for(int i = 0; i <= TAMANO_MAXIMO_PLANO; i += (TAMANO_MAXIMO_PLANO / 20)){
             Line lineaVertical = new Line();
             grafica.getChildren().addAll(lineaVertical);
             lineaVertical.setStartX(i);
             lineaVertical.setStartY(0.0f);
             lineaVertical.setEndX(i);
-            lineaVertical.setEndY(tamannoMaximoPlano);
+            lineaVertical.setEndY(TAMANO_MAXIMO_PLANO);
             lineaVertical.setStroke(Color.GREY);
 
             Line lineaHorizontal = new Line();
             grafica.getChildren().addAll(lineaHorizontal);
             lineaHorizontal.setStartX(0.0f);
             lineaHorizontal.setStartY(i);
-            lineaHorizontal.setEndX(tamannoMaximoPlano);
+            lineaHorizontal.setEndX(TAMANO_MAXIMO_PLANO);
             lineaHorizontal.setEndY(i);
             lineaHorizontal.setStroke(Color.GREY);
 
-            if(i == tamannoMaximoPlano / 2){
+            if(i == TAMANO_MAXIMO_PLANO / 2){
                 lineaVertical.setStrokeWidth(3.0);
                 lineaHorizontal.setStrokeWidth(3.0);
                 lineaVertical.setStroke(Color.BLACK);
