@@ -1,5 +1,6 @@
 package Interfaz;
 
+import Logica.TransformacionLineal;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -11,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
@@ -67,9 +69,22 @@ public class ControladorTransformacionesLineales implements Initializable{
 
     private static final int TAMANO_MAXIMO_PLANO = 340; // Tamanno maximo en pixeles de los panes, se asume que los
                                                         // panes son cuadrados.
+    private double escala;
+
 
     private int[] vectorU = {0, 0};
     private int[] vectorV = {0, 0};
+
+    private int[] transU = {0,0};
+    private int[] transV = {0,0};
+
+    private int[] alfaU = {0,0};
+    private int[] betaV = {0,0};
+    private int[] alfaU_BetaV = {0,0};
+
+    private int[] transAlfaU = {0,0};
+    private int[] transBetaV = {0,0};
+    private int[] transAlfaU_BetaV = {0,0};
 
     private int alfa;
     private int beta;
@@ -85,6 +100,9 @@ public class ControladorTransformacionesLineales implements Initializable{
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        float x = 5.3f;
+        float y = -2.0f;
+
         hacerEntradasNumericas();
 
         dibujarPlano(paneSuperiorIzquierdo);
@@ -92,14 +110,37 @@ public class ControladorTransformacionesLineales implements Initializable{
         dibujarPlano(paneInferiorIzquierdo);
         dibujarPlano(paneInferiorDerecho);
 
+        botonCalcularGraficar.setOnAction(event -> {
+            obtenerEntradas();
+            calcularTransformaciones();
+            escala = determinarEscala();
+
+            System.out.print("Escala: "); //TODO Debug, remover despues
+            System.out.println(escala);
+
+            dibujarVector(vectorU[0], vectorU[1], paneSuperiorIzquierdo, Color.RED);
+            dibujarVector(vectorV[0], vectorV[1], paneSuperiorIzquierdo, Color.GREEN);
+
+            dibujarVector(transU[0], transU[1], paneSuperiorDerecho, Color.RED);
+            dibujarVector(transV[0], transV[1], paneSuperiorDerecho, Color.GREEN);
+
+            dibujarVector(alfaU[0], alfaU[1], paneInferiorIzquierdo, Color.RED);
+            dibujarVector(betaV[0], betaV[1], paneInferiorIzquierdo, Color.GREEN);
+            dibujarVector(alfaU_BetaV[0], alfaU_BetaV[1], paneInferiorIzquierdo, Color.BLUE);
+
+            dibujarVector(transAlfaU[0], transAlfaU[1], paneInferiorDerecho, Color.RED);
+            dibujarVector(transBetaV[0], transBetaV[1], paneInferiorDerecho, Color.GREEN);
+            dibujarVector(transAlfaU_BetaV[0], transAlfaU_BetaV[1], paneInferiorDerecho, Color.BLUE);
+        });
+
         /*Line lineaPrueba = new Line();
         paneSuperiorIzquierdo.getChildren().addAll(lineaPrueba);
         lineaPrueba.setStartX(170.0f);
         lineaPrueba.setStartY(170.0f);
-        lineaPrueba.setEndX(280.0f);
-        lineaPrueba.setEndY(340.0f);
+        lineaPrueba.setEndX(170.0f + 17 * x);
+        lineaPrueba.setEndY(170.0f - 17 * y);
         lineaPrueba.setStrokeWidth(3.0f);
-        lineaPrueba.setStroke(Color.GREEN);
+        lineaPrueba.setStroke(Color.GREEN);*/
 
         //paneSuperiorIzquierdo.getChildren().addAll(lineaPrueba);*/
     }
@@ -136,6 +177,19 @@ public class ControladorTransformacionesLineales implements Initializable{
         }
     }
 
+    private Line dibujarVector(int x, int y, Pane plano, Color color){
+        Line lineaVector = new Line();
+        plano.getChildren().addAll(lineaVector);
+        lineaVector.setStartX(170.0f);
+        lineaVector.setStartY(170.0f);
+        lineaVector.setEndX(170.0f + 17 * (x / escala));
+        lineaVector.setEndY(170.0f - 17 * (y / escala));
+        lineaVector.setStrokeWidth(3.0f);
+        lineaVector.setStroke(color);
+
+        return lineaVector;
+    }
+
     private void obtenerEntradas(){
         alfa = Integer.parseInt(entradaAlfa.getText());
         beta = Integer.parseInt(entradaBeta.getText());
@@ -143,13 +197,66 @@ public class ControladorTransformacionesLineales implements Initializable{
         vectorU[0] = Integer.parseInt(entradaU1.getText());
         vectorU[1] = Integer.parseInt(entradaU2.getText());
 
-        vectorV[0] = Integer.parseInt(entradaU1.getText());
+        vectorV[0] = Integer.parseInt(entradaV1.getText());
         vectorV[1] = Integer.parseInt(entradaV2.getText());
 
         matrizTransformacionLineal[0][0] = Integer.parseInt(entradaT11.getText());
         matrizTransformacionLineal[0][1] = Integer.parseInt(entradaT12.getText());
         matrizTransformacionLineal[1][0] = Integer.parseInt(entradaT21.getText());
         matrizTransformacionLineal[1][1] = Integer.parseInt(entradaT22.getText());
+    }
+
+    private void calcularTransformaciones(){
+        transU = TransformacionLineal.hacerTransformacionLineal(matrizTransformacionLineal, vectorU);
+        transV = TransformacionLineal.hacerTransformacionLineal(matrizTransformacionLineal, vectorV);
+
+        alfaU = TransformacionLineal.multiplicarPorEscalar(vectorU, alfa);
+        betaV = TransformacionLineal.multiplicarPorEscalar(vectorV, beta);
+        alfaU_BetaV = TransformacionLineal.sumarVectores(alfaU, betaV);
+
+        transAlfaU = TransformacionLineal.hacerTransformacionLineal(matrizTransformacionLineal, alfaU);
+        transBetaV = TransformacionLineal.hacerTransformacionLineal(matrizTransformacionLineal, betaV);
+        transAlfaU_BetaV = TransformacionLineal.hacerTransformacionLineal(matrizTransformacionLineal, alfaU_BetaV);
+    }
+
+    private double determinarEscala(){
+        return Math.pow(10, (int) Math.log10(determinarMayor())); //Esta la hizo Tono
+    }
+
+    private int determinarMayor(){
+        ArrayList<int[]> matrizVectores = hacerMatrizVectores();
+
+        int mayor = 0;
+
+        for(int i = 0; i < 10; i++){
+            for(int j = 0; j < 2; j++){
+                System.out.println(matrizVectores.get(i)[j]);
+                if(matrizVectores.get(i)[j] > mayor){
+                    mayor = matrizVectores.get(i)[j];
+                }
+            }
+        }
+
+        return mayor;
+    }
+
+    private ArrayList<int[]> hacerMatrizVectores(){
+        ArrayList<int[]> matrizVectores = new ArrayList<>();
+        matrizVectores.add(vectorU);
+        matrizVectores.add(vectorV);
+
+        matrizVectores.add(transU);
+        matrizVectores.add(transV);
+
+        matrizVectores.add(alfaU);
+        matrizVectores.add(betaV);
+        matrizVectores.add(alfaU_BetaV);
+
+        matrizVectores.add(transAlfaU);
+        matrizVectores.add(transBetaV);
+        matrizVectores.add(transAlfaU_BetaV);
+
+        return matrizVectores;
     }
 
     private void hacerEntradasNumericas(){
