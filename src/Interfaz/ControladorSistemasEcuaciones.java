@@ -16,7 +16,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,34 +25,6 @@ import java.util.ResourceBundle;
  * 27 may 2017.
  */
 public class ControladorSistemasEcuaciones implements Initializable {
-
-    //UI
-    @FXML
-    public MenuItem menuItemF2;
-    @FXML
-    public MenuItem menuItemF3;
-    @FXML
-    public MenuItem menuItemF4;
-    @FXML
-    public MenuItem menuItemF5;
-    @FXML
-    public MenuItem menuItemC2;
-    @FXML
-    public MenuItem menuItemC3;
-    @FXML
-    public MenuItem menuItemC4;
-    @FXML
-    public MenuItem menuItemC5;
-    @FXML
-    public Button btnResolver;
-    @FXML
-    public Button btnLimpiar;
-    @FXML
-    public Button btnVolver;
-    @FXML
-    public GridPane gridPaneSistema;
-    @FXML
-    public GridPane gridPaneSolucion;
 
     private int filas;
     private int columnas;
@@ -311,17 +282,45 @@ public class ControladorSistemasEcuaciones implements Initializable {
     private void volver() {
         Stage escenario = new Stage();
         FXMLLoader loader = new FXMLLoader();
-        Parent raiz = null;                                                                                             //Se crean estos tres objetos
+        Parent raiz;                                                                                             //Se crean estos tres objetos
         try {
             raiz = loader.load(getClass().getResource("Inicio.fxml").openStream());                                 //Con esto se indica el FXML de la nueva ventana
+            escenario.setTitle("Bases y dimensión de un sistema homogéneo de ecuaciones lineales");
+            escenario.setScene(new Scene(raiz));
+            escenario.show();
+
+            Stage temporal = (Stage) btnVolver.getScene().getWindow();                                                      //Se obtiene el stage al que pertenece el boton que abre la nueva ventana para poder cerrarla
+            temporal.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        escenario.setTitle("Bases y dimensión de un sistema homogéneo de ecuaciones lineales");
-        escenario.setScene(new Scene(raiz));
-        escenario.show();
-
-        Stage temporal = (Stage) btnVolver.getScene().getWindow();                                                      //Se obtiene el stage al que pertenece el boton que abre la nueva ventana para poder cerrarla
-        temporal.close();
     }
+
+    //UI
+    @FXML
+    public MenuItem menuItemF2;
+    @FXML
+    public MenuItem menuItemF3;
+    @FXML
+    public MenuItem menuItemF4;
+    @FXML
+    public MenuItem menuItemF5;
+    @FXML
+    public MenuItem menuItemC2;
+    @FXML
+    public MenuItem menuItemC3;
+    @FXML
+    public MenuItem menuItemC4;
+    @FXML
+    public MenuItem menuItemC5;
+    @FXML
+    public Button btnResolver;
+    @FXML
+    public Button btnLimpiar;
+    @FXML
+    public Button btnVolver;
+    @FXML
+    public GridPane gridPaneSistema;
+    @FXML
+    public GridPane gridPaneSolucion;
 }
