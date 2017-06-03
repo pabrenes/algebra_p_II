@@ -263,10 +263,7 @@ public class ControladorSistemasEcuaciones implements Initializable {
     private void resolver() {
         if (!construirSistema())
             return;
-        sistema.print();
         Fraccion[][] solucion = sistema.espacioDeSolucion();
-        Matriz akdfl = new Matriz(solucion);
-        akdfl.print();
         construirSolucion(solucion);
     }
 

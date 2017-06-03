@@ -46,14 +46,9 @@ public class Matriz {
                 filaReal++;                                                                                             //Si usé la matriz actual, debo pasar a la siguiente de esta
                 diagonalActual++;                                                                                       //avanzo a la siguiente diagonal
             } else {                                                                                                    //Si en la matriz actual hace falta un valor diagonal
+                independientes.add(i);
                 matrizNormalizada[i] = ghostRow(diagonalActual);                                                        //Se crea la nueva fila con el valor diagonal independiente
                 diagonalActual++;                                                                                       //No me moví en la real, cree una nueva columna, pero sí en la nueva cuadrada
-            }
-        }
-        //A este punto ya existe una matriz cuadrada con las variables de solución vamos a procesar las independientes
-        for (int i = 0; i < columnas; i++) {                                                                            //Para cada nueva fila de la matriz normalizada
-            if (columnaIndependiente(matrizNormalizada[i], i)) {                                                        //Si una variable es independiente
-                independientes.add(i);                                                                                  //guarde el índice de columna de este
             }
         }
         espacioDeSolucion = new Fraccion[independientes.size()][columnas];                                              //Espacio en memoria para las soluciones
@@ -70,23 +65,6 @@ public class Matriz {
             diagonalActual++;                                                                                           //Debo avanzar a la siguiente columna (indice del for each)
         }
         return espacioDeSolucion;                                                                                       //Retorne el espacio de solución encontrado
-    }
-
-    /**
-     * Determina si una columna (variable) de una matriz de soluciones es independiente, una variable es independiente, si en toda
-     * la fila donde se encuentra es la única con un valor
-     *
-     * @param fila     Vector unidimensional donde se validará la independencia de la columna
-     * @param diagonal posición donde sólo debería existir el valor
-     * @return Boleean, es independiente la columna ? true | false
-     */
-    private boolean columnaIndependiente(Fraccion[] fila, int diagonal) {
-        for (int i = diagonal + 1; i < columnas; i++) {
-            if (!fila[i].equals(FRACCION_CERO)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**
@@ -227,19 +205,6 @@ public class Matriz {
         for (int i = 0; i < largoFila; i++) {
             matriz[fila2][i] = Fraccion.sumar(matriz[fila2][i],
                     Fraccion.multiplicar(matriz[fila1][i], escalar));
-        }
-    }
-
-    /**
-     * Envía la matriz en formato de String a la consola
-     */
-    public void print() {
-        for (int i = 0; i < filas; i++) {
-            for (int j = 0; j < columnas; j++) {
-                System.out.print(matriz[i][j].toString());
-                System.out.print('\t');
-            }
-            System.out.println();
         }
     }
 
