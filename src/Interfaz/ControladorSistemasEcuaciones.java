@@ -59,7 +59,9 @@ public class ControladorSistemasEcuaciones implements Initializable {
     private int columnas;
     private Matriz sistema;
 
-    private static final String[] VARIABLES = {"X", "Y", "Z", "W", "S"};
+    private final String[] VARIABLES = {" X", " Y", " Z", "W", " S"};
+    private final int ERROR_DIV_ZERO = 1;
+    private final int ERROR_NON_NUME = 2;
 
     /**
      * Función que se autoejecuta en la creación de esta pantalla
@@ -76,9 +78,7 @@ public class ControladorSistemasEcuaciones implements Initializable {
         configurarMenuColumnas();
         btnResolver.setOnAction(event -> resolver());
         btnLimpiar.setOnAction(event -> limpiar());
-        btnVolver.setOnAction(event -> {
-            volver();
-        });
+        btnVolver.setOnAction(event -> volver());
     }
 
     /**
@@ -120,9 +120,9 @@ public class ControladorSistemasEcuaciones implements Initializable {
         contenedorVertical.getChildren().addAll(entradaNumerador, separador, entradaDenominador);
         Label lblVariable = new Label();
         if (last) {
-            lblVariable.setText("  " + VARIABLES[varPos] + "  =  0");
+            lblVariable.setText(" " + VARIABLES[varPos] + "  =  0");
         } else {
-            lblVariable.setText("  " + VARIABLES[varPos] + "  + ");
+            lblVariable.setText(" " + VARIABLES[varPos] + "  + ");
         }
         lblVariable.setFont(new Font("Times New Roman", 16));
         lblVariable.setMaxSize(55, 55);
@@ -178,6 +178,9 @@ public class ControladorSistemasEcuaciones implements Initializable {
      * @param solucion vector de dos dimensiones con las bases de la solución del sistema
      */
     private void construirSolucion(Fraccion[][] solucion) {
+        if (solucion.length == 0){
+            System.out.println("TODO CERO PAPU");
+        }
         gridPaneSolucion.getChildren().clear();
         for (int i = 0; i < solucion.length; i++) {
             for (int j = 0; j < solucion[i].length; j++) {
@@ -196,19 +199,29 @@ public class ControladorSistemasEcuaciones implements Initializable {
      */
     private VBox construirEntradaSolucion(Fraccion[][] solucion, int fila, int columna) {
         Fraccion fraccion = solucion[fila][columna];
+        String numerador = String.valueOf(fraccion.getNumerador());
+        String denominador = String.valueOf(fraccion.getDenominador());
+        double sizeOfLine = 8.75 * Math.max(numerador.length(), denominador.length());
         VBox contenedorVertical = new VBox();
         contenedorVertical.setAlignment(Pos.CENTER);
-        TextField entradaNumerador = new TextField();
-        entradaNumerador.setEditable(false);
+        contenedorVertical.setMinSize(52, 52);
+        contenedorVertical.setMaxSize(52, 52);
+        Label entradaNumerador = new Label();
         entradaNumerador.setAlignment(Pos.CENTER);
-        entradaNumerador.setText(String.valueOf(fraccion.getNumerador()));
-        Separator separador = new Separator(Orientation.HORIZONTAL);
-        TextField entradaDenominador = new TextField();
-        entradaDenominador.setEditable(false);
+        entradaNumerador.setText(numerador);
+        entradaNumerador.setFont(new Font("Times New Roman", 16));
+        if (fraccion.getDenominador() == 1) {
+            contenedorVertical.getChildren().addAll(entradaNumerador);
+            return contenedorVertical;
+        }
+        Label separador = new Label();
+        separador.setMinSize(sizeOfLine, 1);
+        separador.setMaxSize(sizeOfLine, 1);
+        separador.setStyle("-fx-background-color: black");
+        Label entradaDenominador = new Label();
         entradaDenominador.setAlignment(Pos.CENTER);
-        entradaDenominador.setText(String.valueOf(fraccion.getDenominador()));
-        contenedorVertical.setMinSize(55, 55);
-        contenedorVertical.setMaxSize(55, 55);
+        entradaDenominador.setText(denominador);
+        entradaDenominador.setFont(new Font("Times New Roman", 16));
         contenedorVertical.getChildren().addAll(entradaNumerador, separador, entradaDenominador);
         return contenedorVertical;
     }
@@ -228,14 +241,30 @@ public class ControladorSistemasEcuaciones implements Initializable {
             numerador = Integer.parseInt(entradaNumerador.getText());
             denominador = Integer.parseInt(entradaDenominador.getText());
             if (denominador == 0){
-                JOptionPane.showMessageDialog(null, "No es posible la división entre cero", "ERROR", JOptionPane.ERROR_MESSAGE);
+                generateError(ERROR_DIV_ZERO);
                 return null;
             }
             return new Fraccion(numerador, denominador);
         }catch(NumberFormatException nfe){
-            JOptionPane.showMessageDialog(null, "La entrada no es válida", "ERROR", JOptionPane.ERROR_MESSAGE);
+            generateError(ERROR_NON_NUME);
         }
         return null;
+    }
+
+    /**
+     * Dado un error lanza un alert dialog indicando que hubo un error
+     *
+     * @param type Condición de error lanzada
+     */
+    private void generateError(int type) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Verifique la validez de las entradas:");
+        if (type == ERROR_DIV_ZERO)
+            alert.setContentText("Las fracciones no pueden presentar denominador cero.");
+        if (type == ERROR_NON_NUME)
+            alert.setContentText("Las entradas deben ser valores numéricos.");
+        alert.show();
     }
 
     /**
@@ -267,27 +296,32 @@ public class ControladorSistemasEcuaciones implements Initializable {
         construirSolucion(solucion);
     }
 
+    /**
+     * Limpia las entradas en caso de que el usuario lo requiera
+     */
     private void limpiar() {
         gridPaneSistema.getChildren().clear();
         construirMatriz();
         gridPaneSolucion.getChildren().clear();
     }
 
+    /**
+     * Regresa al menú inicial
+     */
     private void volver() {
         Stage escenario = new Stage();
         FXMLLoader loader = new FXMLLoader();
-        Parent raiz = null;                                                                                              //Se crean estos tres objetos
+        Parent raiz = null;                                                                                             //Se crean estos tres objetos
         try {
-            raiz = loader.load(getClass().getResource("Inicio.fxml").openStream());                           //Con esto se indica el FXML de la nueva ventana
+            raiz = loader.load(getClass().getResource("Inicio.fxml").openStream());                                 //Con esto se indica el FXML de la nueva ventana
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ControladorInicio controlador = (ControladorInicio) loader.getController();                            //Se instancia el controlador respectivo, se debe hacer un casting para que funcione.
         escenario.setTitle("Bases y dimensión de un sistema homogéneo de ecuaciones lineales");
         escenario.setScene(new Scene(raiz));
         escenario.show();
 
-        Stage temporal = (Stage) btnVolver.getScene().getWindow();                                             //Se obtiene el stage al que pertenece el boton que abre la nueva ventana para poder cerrarla
+        Stage temporal = (Stage) btnVolver.getScene().getWindow();                                                      //Se obtiene el stage al que pertenece el boton que abre la nueva ventana para poder cerrarla
         temporal.close();
     }
 }
