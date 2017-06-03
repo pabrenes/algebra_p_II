@@ -67,10 +67,12 @@ public class ControladorTransformacionesLineales implements Initializable{
     @FXML
     public TextField entradaT22;
 
-    private static final int TAMANO_MAXIMO_PLANO = 340; // Tamanno maximo en pixeles de los panes, se asume que los
+    private static final int TAMANO_MAXIMO_PLANO = 380; // Tamanno maximo en pixeles de los panes, se asume que los
                                                         // panes son cuadrados.
-    private double escala;
+    private static final int EQUIVALENTE_CERO = TAMANO_MAXIMO_PLANO / 2;
 
+    private double escala = 1;
+    private int segmentacion = 1;
 
     private int[] vectorU = {0, 0};
     private int[] vectorV = {0, 0};
@@ -92,6 +94,7 @@ public class ControladorTransformacionesLineales implements Initializable{
     private int[][] matrizTransformacionLineal = {{1, 0},
                                                   {0, 1}};
 
+
     /**
      * Función que se autoejecuta en la creación de esta pantalla
      *
@@ -100,9 +103,6 @@ public class ControladorTransformacionesLineales implements Initializable{
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        float x = 5.3f;
-        float y = -2.0f;
-
         hacerEntradasNumericas();
 
         dibujarPlano(paneSuperiorIzquierdo);
@@ -114,6 +114,7 @@ public class ControladorTransformacionesLineales implements Initializable{
             obtenerEntradas();
             calcularTransformaciones();
             escala = determinarEscala();
+            segmentacion = determinarSegmentacion();
 
             System.out.print("Escala: "); //TODO Debug, remover despues
             System.out.println(escala);
@@ -145,13 +146,38 @@ public class ControladorTransformacionesLineales implements Initializable{
         //paneSuperiorIzquierdo.getChildren().addAll(lineaPrueba);*/
     }
 
+    private void dibujarPlano(Pane grafica){
+        dibujarEjesSecundarios(grafica);
+        dibujarEjesXY(grafica);
+    }
+
+    private void dibujarEjesXY(Pane grafica){
+        Line ejeX = new Line();
+        grafica.getChildren().addAll(ejeX);
+        ejeX.setStartX(0.0f);
+        ejeX.setStartY(EQUIVALENTE_CERO);
+        ejeX.setEndX(TAMANO_MAXIMO_PLANO);
+        ejeX.setEndY(EQUIVALENTE_CERO);
+        ejeX.setStroke(Color.BLACK);
+        ejeX.setStrokeWidth(3.0);
+
+        Line ejeY = new Line();
+        grafica.getChildren().addAll(ejeY);
+        ejeY.setStartX(EQUIVALENTE_CERO);
+        ejeY.setStartY(0.0f);
+        ejeY.setEndX(EQUIVALENTE_CERO);
+        ejeY.setEndY(TAMANO_MAXIMO_PLANO);
+        ejeY.setStroke(Color.BLACK);
+        ejeY.setStrokeWidth(3.0);
+    }
+
     /**
      * Dibuja los ejes principales y secundarios de un plano cartesiano sobre el pane ingresado
      *
      * @param grafica Pane sobre el cual se dibujaran los ejes
      */
-    private void dibujarPlano(Pane grafica){
-        for(int i = 0; i <= TAMANO_MAXIMO_PLANO; i += (TAMANO_MAXIMO_PLANO / 20)){
+    private void dibujarEjesSecundarios(Pane grafica){
+        for(int i = 0; i <= TAMANO_MAXIMO_PLANO; i += (TAMANO_MAXIMO_PLANO / segmentacion)){
             Line lineaVertical = new Line();
             grafica.getChildren().addAll(lineaVertical);
             lineaVertical.setStartX(i);
@@ -167,27 +193,25 @@ public class ControladorTransformacionesLineales implements Initializable{
             lineaHorizontal.setEndX(TAMANO_MAXIMO_PLANO);
             lineaHorizontal.setEndY(i);
             lineaHorizontal.setStroke(Color.GREY);
-
-            if(i == TAMANO_MAXIMO_PLANO / 2){
-                lineaVertical.setStrokeWidth(3.0);
-                lineaHorizontal.setStrokeWidth(3.0);
-                lineaVertical.setStroke(Color.BLACK);
-                lineaHorizontal.setStroke(Color.BLACK);
-            }
         }
     }
+
+
 
     private Line dibujarVector(int x, int y, Pane plano, Color color){
         Line lineaVector = new Line();
         plano.getChildren().addAll(lineaVector);
-        lineaVector.setStartX(170.0f);
-        lineaVector.setStartY(170.0f);
-        lineaVector.setEndX(170.0f + 17 * (x / escala));
-        lineaVector.setEndY(170.0f - 17 * (y / escala));
+        lineaVector.setStartX(EQUIVALENTE_CERO);
+        lineaVector.setStartY(EQUIVALENTE_CERO);
+        lineaVector.setEndX(EQUIVALENTE_CERO + (EQUIVALENTE_CERO / (segmentacion / 2)) * (x / escala));
+        lineaVector.setEndY(EQUIVALENTE_CERO - (EQUIVALENTE_CERO / (segmentacion / 2)) * (y / escala));
         lineaVector.setStrokeWidth(3.0f);
         lineaVector.setStroke(color);
 
         return lineaVector;
+    }
+
+    private void limpiarPlanos(){
     }
 
     private void obtenerEntradas(){
@@ -219,8 +243,24 @@ public class ControladorTransformacionesLineales implements Initializable{
         transAlfaU_BetaV = TransformacionLineal.hacerTransformacionLineal(matrizTransformacionLineal, alfaU_BetaV);
     }
 
-    private double determinarEscala(){
-        return Math.pow(10, (int) Math.log10(determinarMayor())); //Esta la hizo Tono
+    private double determinarEscala() {
+        /*int mayor = determinarMayor();
+        int escalaActual = 10;
+        while (true){
+            if(mayor<escalaActual){
+                break;
+            }
+            else{
+                escalaActual += 10;
+            }
+        }
+        return escalaActual / 10;*/
+        return Math.pow(10, (int) Math.log10(determinarMayor()));
+    }
+
+    private int determinarSegmentacion(){
+        int mayor = determinarMayor();
+        return 2 * ((int) (mayor / escala) + 1);
     }
 
     private int determinarMayor(){
