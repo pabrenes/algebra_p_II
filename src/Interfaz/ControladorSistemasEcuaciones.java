@@ -179,7 +179,7 @@ public class ControladorSistemasEcuaciones implements Initializable {
         } else {
             lblSolucionHeader.setText(
                     "El sistema posee soluciones infinitas. \n" +
-                            "La dimensión del espacio de solución es: " + solucion.length + ". \n" +
+                            "La dimensión del espacio de solución es " + solucion.length + ". \n" +
                             "Una base para el espacio del sistema de solución es:");
             for (int i = 0; i < solucion.length; i++) {
                 Group tmpGroup = crearParentesisVector(
