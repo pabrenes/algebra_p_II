@@ -3,13 +3,10 @@ package Interfaz;
 import Logica.Fraccion;
 import Logica.Matriz;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,9 +21,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.QuadCurve;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -35,7 +30,7 @@ import java.util.ResourceBundle;
  * Created by Pablo Brenes 2016250460
  * 27 may 2017.
  */
-public class ControladorSistemasEcuaciones implements Initializable {
+public class ControladorSistemasEcuaciones extends CambiarVentana implements Initializable {
 
     private int filas;
     private int columnas;
@@ -68,7 +63,11 @@ public class ControladorSistemasEcuaciones implements Initializable {
         configurarMenuColumnas();
         btnResolver.setOnAction(event -> resolver());
         btnLimpiar.setOnAction(event -> limpiar());
-        btnVolver.setOnAction(event -> volver());
+        btnVolver.setOnAction(event -> abrirVentana(
+                CambiarVentana.FXML_MENU_PRINCIPAL,
+                CambiarVentana.TITLE_MENU_PRINCIPAL,
+                btnVolver
+        ));
     }
 
     /**
@@ -353,26 +352,6 @@ public class ControladorSistemasEcuaciones implements Initializable {
         construirMatriz();
         cleanParentesis();
         gridPaneSolucion.getChildren().clear();
-    }
-
-    /**
-     * Regresa al menú inicial
-     */
-    private void volver() {
-        Stage escenario = new Stage();
-        FXMLLoader loader = new FXMLLoader();
-        Parent raiz;                                                                                                    //Se crean estos tres objetos
-        try {
-            raiz = loader.load(getClass().getResource("Inicio.fxml").openStream());                                 //Con esto se indica el FXML de la nueva ventana
-            escenario.setTitle("Bases y dimensión de un sistema homogéneo de ecuaciones lineales");
-            escenario.setScene(new Scene(raiz));
-            escenario.show();
-
-            Stage temporal = (Stage) btnVolver.getScene().getWindow();                                                      //Se obtiene el stage al que pertenece el boton que abre la nueva ventana para poder cerrarla
-            temporal.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**

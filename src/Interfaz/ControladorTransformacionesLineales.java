@@ -4,13 +4,8 @@ import Logica.TransformacionLineal;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -19,10 +14,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -33,7 +26,7 @@ import java.util.ResourceBundle;
  */
 
 
-public class ControladorTransformacionesLineales implements Initializable {
+public class ControladorTransformacionesLineales extends CambiarVentana implements Initializable {
     @FXML
     public Pane paneSuperiorIzquierdo;
 
@@ -135,7 +128,11 @@ public class ControladorTransformacionesLineales implements Initializable {
         dibujarPlano(paneInferiorDerecho);
 
         botonCalcularGraficar.setOnAction(event -> configBotonCalcular());
-        botonVolver.setOnAction(event -> volver());
+        botonVolver.setOnAction(event -> abrirVentana(
+                CambiarVentana.FXML_MENU_PRINCIPAL,
+                CambiarVentana.TITLE_MENU_PRINCIPAL,
+                botonVolver
+        ));
     }
 
     /**
@@ -178,7 +175,7 @@ public class ControladorTransformacionesLineales implements Initializable {
     /**
      * Dibuja un plano cartesiano completo sobre la grafica dada.
      *
-     * @param grafica
+     * @param grafica Pane, donde será dibujada la gráfica
      */
     private void dibujarPlano(Pane grafica) {
         dibujarEjesSecundarios(grafica);
@@ -464,54 +461,30 @@ public class ControladorTransformacionesLineales implements Initializable {
 
     static void limitarEntrada(final TextField textField, final int longitudMaxima) {
         //Tamanno
-        textField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
-                try {
-                    if (textField.getText().length() > longitudMaxima) {
-                        String s = textField.getText().substring(0, longitudMaxima);
-                        textField.setText(s);
-                    }
-                } catch (Exception e) {
-                    //e.printStackTrace();
+        textField.textProperty().addListener((ov, oldValue, newValue) -> {
+            try {
+                if (textField.getText().length() > longitudMaxima) {
+                    String s = textField.getText().substring(0, longitudMaxima);
+                    textField.setText(s);
                 }
+            } catch (Exception ignored) {
             }
         });
 
         //Numericos
-        textField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                try {
-                    if (!newValue.equals("") & !newValue.equals("-")) {
-                        int numero = Math.abs(Integer.parseInt(newValue));
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                if (!newValue.equals("") & !newValue.equals("-")) {
+                    int numero = Math.abs(Integer.parseInt(newValue));
 
-                        if ((Math.log10(numero) + 1) >= longitudMaxima) {
-                            textField.setText(oldValue);
-                        }
+                    if ((Math.log10(numero) + 1) >= longitudMaxima) {
+                        textField.setText(oldValue);
                     }
-                } catch (Exception e) {
-                    textField.setText(oldValue);
                 }
+            } catch (Exception e) {
+                textField.setText(oldValue);
             }
         });
-    }
-
-    private void volver() {
-        Stage escenario = new Stage();
-        FXMLLoader loader = new FXMLLoader();
-        Parent raiz;                                                                                                    //Se crean estos tres objetos
-        try {
-            raiz = loader.load(getClass().getResource("Inicio.fxml").openStream());                                 //Con esto se indica el FXML de la nueva ventana
-            escenario.setTitle("Bases y dimensión de un sistema homogéneo de ecuaciones lineales");
-            escenario.setScene(new Scene(raiz));
-            escenario.show();
-
-            Stage temporal = (Stage) botonVolver.getScene().getWindow();                                                      //Se obtiene el stage al que pertenece el boton que abre la nueva ventana para poder cerrarla
-            temporal.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 }
