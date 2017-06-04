@@ -356,7 +356,7 @@ public class ControladorTransformacionesLineales implements Initializable{
                     if(!newValue.equals("") & !newValue.equals("-")){
                         int numero = Math.abs(Integer.parseInt(newValue));
 
-                        if((Math.log10(numero) + 1) >= 3){
+                        if((Math.log10(numero) + 1) >= longitudMaxima){
                             textField.setText(oldValue);
                         }
                     }

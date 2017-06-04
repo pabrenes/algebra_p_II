@@ -119,6 +119,8 @@ public class ControladorSistemasEcuaciones implements Initializable {
         lblVariable.setMaxSize(55, 55);
         lblVariable.setMinSize(55, 55);
         contenedorHorizontal.setAlignment(Pos.CENTER);
+        ControladorTransformacionesLineales.limitarEntrada(entradaNumerador, 5);
+        ControladorTransformacionesLineales.limitarEntrada(entradaDenominador, 5);
         contenedorHorizontal.getChildren().addAll(contenedorVertical, lblVariable);
         return contenedorHorizontal;
     }
