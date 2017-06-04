@@ -1,6 +1,9 @@
 package Interfaz;
 
 import Logica.TransformacionLineal;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -10,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -67,12 +71,13 @@ public class ControladorTransformacionesLineales implements Initializable{
     @FXML
     public TextField entradaT22;
 
-    private static final int TAMANO_MAXIMO_PLANO = 380; // Tamanno maximo en pixeles de los panes, se asume que los
-                                                        // panes son cuadrados.
-    private static final int EQUIVALENTE_CERO = TAMANO_MAXIMO_PLANO / 2;
 
-    private double escala = 1;
-    private int segmentacion = 1;
+    private static final double TAMANO_MAXIMO_PLANO = 380; // Tamanno maximo en pixeles de los panes, se asume que los
+                                                        // panes son cuadrados.
+    private static final double EQUIVALENTE_CERO = TAMANO_MAXIMO_PLANO / 2;
+
+    private static double escala = 1;
+    private static double segmentacion = 1;
 
     private int[] vectorU = {0, 0};
     private int[] vectorV = {0, 0};
@@ -94,11 +99,10 @@ public class ControladorTransformacionesLineales implements Initializable{
     private int[][] matrizTransformacionLineal = {{1, 0},
                                                   {0, 1}};
 
-
     /**
      * Función que se autoejecuta en la creación de esta pantalla
      *
-     * @param location  Localizaciión para obtener el path relativo a la raíz del objeto
+     * @param location  Localización para obtener el path relativo a la raíz del objeto
      * @param resources Recursos necesarios para encontrar la raíz del objeto
      */
     @Override
@@ -138,18 +142,10 @@ public class ControladorTransformacionesLineales implements Initializable{
             dibujarVector(transAlfaU[0], transAlfaU[1], paneInferiorDerecho, Color.RED);
             dibujarVector(transBetaV[0], transBetaV[1], paneInferiorDerecho, Color.GREEN);
             dibujarVector(transAlfaU_BetaV[0], transAlfaU_BetaV[1], paneInferiorDerecho, Color.BLUE);
+
+            iniciarAnimacion(alfaU, alfaU_BetaV, betaV, paneInferiorIzquierdo);
+            iniciarAnimacion(transAlfaU, transAlfaU_BetaV, transBetaV, paneInferiorDerecho);
         });
-
-        /*Line lineaPrueba = new Line();
-        paneSuperiorIzquierdo.getChildren().addAll(lineaPrueba);
-        lineaPrueba.setStartX(170.0f);
-        lineaPrueba.setStartY(170.0f);
-        lineaPrueba.setEndX(170.0f + 17 * x);
-        lineaPrueba.setEndY(170.0f - 17 * y);
-        lineaPrueba.setStrokeWidth(3.0f);
-        lineaPrueba.setStroke(Color.GREEN);*/
-
-        //paneSuperiorIzquierdo.getChildren().addAll(lineaPrueba);*/
     }
 
     private void dibujarPlano(Pane grafica){
@@ -188,7 +184,7 @@ public class ControladorTransformacionesLineales implements Initializable{
      * @param grafica Pane sobre el cual se dibujaran los ejes
      */
     private void dibujarEjesSecundarios(Pane grafica){
-        for(int i = 0; i <= TAMANO_MAXIMO_PLANO; i += (TAMANO_MAXIMO_PLANO / segmentacion)){
+        for(double i = 0; i <= TAMANO_MAXIMO_PLANO; i += (TAMANO_MAXIMO_PLANO / segmentacion)){
             Line lineaVertical = new Line();
             grafica.getChildren().addAll(lineaVertical);
             lineaVertical.setStartX(i);
@@ -207,9 +203,7 @@ public class ControladorTransformacionesLineales implements Initializable{
         }
     }
 
-
-
-    private Line dibujarVector(int x, int y, Pane plano, Color color){
+    private static Line dibujarVector(double x, double y, Pane plano, Color color){
         Line lineaVector = new Line();
         plano.getChildren().addAll(lineaVector);
         lineaVector.setStartX(EQUIVALENTE_CERO);
@@ -222,6 +216,35 @@ public class ControladorTransformacionesLineales implements Initializable{
         return lineaVector;
     }
 
+
+
+    private void iniciarAnimacion(int[] vectorU, int[] vectorU_V, int[] vectorV, Pane grafico){
+        Line lineaU = dibujarVector(vectorU[0], vectorU[1],grafico, Color.RED);
+        Line lineaU_V = dibujarVector(vectorU_V[0], vectorU_V[1], grafico, Color.BLUE);
+        Line lineaFantasma = dibujarVector(vectorV[0], vectorV[1], grafico, Color.MAGENTA);
+
+        final Timeline timeline = new Timeline();
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.setAutoReverse(true);
+
+        final KeyValue keyValueStartX = new KeyValue(lineaFantasma.startXProperty(), lineaU.getEndX());
+        final KeyValue keyValueStartY = new KeyValue(lineaFantasma.startYProperty(), lineaU.getEndY());
+        final KeyValue keyValueEndX = new KeyValue(lineaFantasma.endXProperty(), lineaU_V.getEndX());
+        final KeyValue keyValueEndY = new KeyValue(lineaFantasma.endYProperty(), lineaU_V.getEndY());
+
+        final KeyFrame keyFrameStartX = new KeyFrame(Duration.seconds(4), keyValueStartX);
+        final KeyFrame keyFrameStartY = new KeyFrame(Duration.seconds(4), keyValueStartY);
+        final KeyFrame keyFrameEndX = new KeyFrame(Duration.seconds(4), keyValueEndX);
+        final KeyFrame keyFrameEndY = new KeyFrame(Duration.seconds(4), keyValueEndY);
+
+        timeline.getKeyFrames().add(keyFrameStartX);
+        timeline.getKeyFrames().add(keyFrameStartY);
+        timeline.getKeyFrames().add(keyFrameEndX);
+        timeline.getKeyFrames().add(keyFrameEndY);
+
+        timeline.play();
+    }
+
     private void limpiarPlanos(){
         limpiarPlano(paneSuperiorIzquierdo);
         limpiarPlano(paneSuperiorDerecho);
@@ -230,7 +253,7 @@ public class ControladorTransformacionesLineales implements Initializable{
     }
 
     private void limpiarPlano(Pane cuadro){
-        cuadro.getChildren().remove(1,cuadro.getChildren().size());
+        cuadro.getChildren().remove(1, cuadro.getChildren().size());
     }
 
     private void obtenerEntradas(){
@@ -295,7 +318,6 @@ public class ControladorTransformacionesLineales implements Initializable{
                 }
             }
         }
-
         return mayor;
     }
 
@@ -320,6 +342,7 @@ public class ControladorTransformacionesLineales implements Initializable{
 
     private void hacerEntradasNumericas(){
         int longitudMaxima = 3;
+
         limitarEntrada(entradaAlfa,longitudMaxima);
         limitarEntrada(entradaBeta,longitudMaxima);
         limitarEntrada(entradaU1,longitudMaxima);
@@ -332,7 +355,7 @@ public class ControladorTransformacionesLineales implements Initializable{
         limitarEntrada(entradaT22,longitudMaxima);
     }
 
-    public static void limitarEntrada(final TextField textField, final int longitudMaxima) {
+    private static void limitarEntrada(final TextField textField, final int longitudMaxima) {
         //Tamanno
         textField.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -360,15 +383,8 @@ public class ControladorTransformacionesLineales implements Initializable{
                             textField.setText(oldValue);
                         }
                     }
-
-                    /*if(newValue.matches("-")){
-                        textField.setText("-");
-                    } else if (!newValue.matches("\\d*")) {
-                        textField.setText(newValue.replaceAll("[^\\d]", ""));
-                    }*/
                 } catch (Exception e) {
                     textField.setText(oldValue);
-                    //e.printStackTrace();
                 }
             }
         });
