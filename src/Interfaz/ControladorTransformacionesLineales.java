@@ -119,6 +119,12 @@ public class ControladorTransformacionesLineales implements Initializable{
             System.out.print("Escala: "); //TODO Debug, remover despues
             System.out.println(escala);
 
+            limpiarPlanos();
+            dibujarPlano(paneSuperiorIzquierdo);
+            dibujarPlano(paneSuperiorDerecho);
+            dibujarPlano(paneInferiorIzquierdo);
+            dibujarPlano(paneInferiorDerecho);
+
             dibujarVector(vectorU[0], vectorU[1], paneSuperiorIzquierdo, Color.RED);
             dibujarVector(vectorV[0], vectorV[1], paneSuperiorIzquierdo, Color.GREEN);
 
@@ -151,6 +157,11 @@ public class ControladorTransformacionesLineales implements Initializable{
         dibujarEjesXY(grafica);
     }
 
+    /**
+     * Dibuja los ejes principales X y Y sobre el centro del pane ingresado.
+     *
+     * @param grafica Pane sobre el cual se dibujaran los ejes
+     */
     private void dibujarEjesXY(Pane grafica){
         Line ejeX = new Line();
         grafica.getChildren().addAll(ejeX);
@@ -172,7 +183,7 @@ public class ControladorTransformacionesLineales implements Initializable{
     }
 
     /**
-     * Dibuja los ejes principales y secundarios de un plano cartesiano sobre el pane ingresado
+     * Dibuja los ejes secundarios de un plano cartesiano sobre el pane ingresado.
      *
      * @param grafica Pane sobre el cual se dibujaran los ejes
      */
@@ -212,6 +223,14 @@ public class ControladorTransformacionesLineales implements Initializable{
     }
 
     private void limpiarPlanos(){
+        limpiarPlano(paneSuperiorIzquierdo);
+        limpiarPlano(paneSuperiorDerecho);
+        limpiarPlano(paneInferiorIzquierdo);
+        limpiarPlano(paneInferiorDerecho);
+    }
+
+    private void limpiarPlano(Pane cuadro){
+        cuadro.getChildren().remove(1,cuadro.getChildren().size());
     }
 
     private void obtenerEntradas(){
@@ -271,8 +290,8 @@ public class ControladorTransformacionesLineales implements Initializable{
         for(int i = 0; i < 10; i++){
             for(int j = 0; j < 2; j++){
                 System.out.println(matrizVectores.get(i)[j]);
-                if(matrizVectores.get(i)[j] > mayor){
-                    mayor = matrizVectores.get(i)[j];
+                if(Math.abs(matrizVectores.get(i)[j]) > mayor){
+                    mayor = Math.abs(matrizVectores.get(i)[j]);
                 }
             }
         }
@@ -300,19 +319,21 @@ public class ControladorTransformacionesLineales implements Initializable{
     }
 
     private void hacerEntradasNumericas(){
-        limitarEntrada(entradaAlfa,2);
-        limitarEntrada(entradaBeta,2);
-        limitarEntrada(entradaU1,2);
-        limitarEntrada(entradaU2, 2);
-        limitarEntrada(entradaV1,2);
-        limitarEntrada(entradaV2,2);
-        limitarEntrada(entradaT11,2);
-        limitarEntrada(entradaT12,2);
-        limitarEntrada(entradaT21,2);
-        limitarEntrada(entradaT22,2);
+        int longitudMaxima = 3;
+        limitarEntrada(entradaAlfa,longitudMaxima);
+        limitarEntrada(entradaBeta,longitudMaxima);
+        limitarEntrada(entradaU1,longitudMaxima);
+        limitarEntrada(entradaU2, longitudMaxima);
+        limitarEntrada(entradaV1,longitudMaxima);
+        limitarEntrada(entradaV2,longitudMaxima);
+        limitarEntrada(entradaT11,longitudMaxima);
+        limitarEntrada(entradaT12,longitudMaxima);
+        limitarEntrada(entradaT21,longitudMaxima);
+        limitarEntrada(entradaT22,longitudMaxima);
     }
 
     public static void limitarEntrada(final TextField textField, final int longitudMaxima) {
+        //Tamanno
         textField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
@@ -327,14 +348,26 @@ public class ControladorTransformacionesLineales implements Initializable{
             }
         });
 
+        //Numericos
         textField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 try {
-                    if (!newValue.matches("\\d*")) {
-                        textField.setText(newValue.replaceAll("[^\\d]", ""));
+                    if(!newValue.equals("") & !newValue.equals("-")){
+                        int numero = Math.abs(Integer.parseInt(newValue));
+
+                        if((Math.log10(numero) + 1) >= 3){
+                            textField.setText(oldValue);
+                        }
                     }
+
+                    /*if(newValue.matches("-")){
+                        textField.setText("-");
+                    } else if (!newValue.matches("\\d*")) {
+                        textField.setText(newValue.replaceAll("[^\\d]", ""));
+                    }*/
                 } catch (Exception e) {
+                    textField.setText(oldValue);
                     //e.printStackTrace();
                 }
             }
