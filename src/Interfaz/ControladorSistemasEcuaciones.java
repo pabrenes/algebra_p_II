@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
- * Created by Pablo Brenes (El gay del grupo) 2016250460
+ * Created by Pablo Brenes 2016250460
  * 27 may 2017.
  */
 public class ControladorSistemasEcuaciones implements Initializable {
@@ -191,7 +191,7 @@ public class ControladorSistemasEcuaciones implements Initializable {
             Group tmpGroup = crearComillas(solucion.length);
             panelPrincipal.getChildren().add(tmpGroup);
             parentesis.add(tmpGroup);
-            tmpGroup = parentesisConjunto();
+            tmpGroup = parentesisConjunto(solucion.length);
             panelPrincipal.getChildren().add(tmpGroup);
             parentesis.add(tmpGroup);
         }
@@ -446,11 +446,11 @@ public class ControladorSistemasEcuaciones implements Initializable {
      *
      * @return Grupo, con los shapes necesarios para crear el conjunto de solución
      */
-    private Group parentesisConjunto() {
+    private Group parentesisConjunto(int dimension) {
         Group group = new Group();
         double XDES = 12;
         double YDES = 10;
-        double XEND = (PARENTESIS_HGAP * (columnas - 1)) + CASILLA_ANCHO;
+        double XEND = (PARENTESIS_HGAP * (dimension - 1)) + CASILLA_ANCHO;
         double X = X_PRIMER_PARENTESIS;
         double Y = Y_PRIMER_PARENTESIS;
 
@@ -480,7 +480,7 @@ public class ControladorSistemasEcuaciones implements Initializable {
         lineaSuperiorDerecha.setStartY(Y + 32 - YDES);
         lineaSuperiorDerecha.setEndX(X + XEND + XDES);
 
-        Y += ((columnas * CASILLA_ALTO) + -5 * (columnas - 5)) / 2 - YDES;
+        Y += ((dimension * CASILLA_ALTO) + -5 * (dimension - 5)) / 2 - YDES;
 
         lineaSuperiorIzquierda.setEndY(Y);
         lineaSuperiorIzquierda.setStroke(Color.BLACK);
@@ -532,7 +532,7 @@ public class ControladorSistemasEcuaciones implements Initializable {
         lineaInferiorDerecha.setStartY(Y + 32 - YDES);
         lineaInferiorDerecha.setEndX(X + XEND + XDES);
 
-        Y += ((columnas * CASILLA_ALTO) + -5 * (columnas - 5)) / 2 - YDES;
+        Y += ((dimension * CASILLA_ALTO) + -5 * (dimension - 5)) / 2 - YDES;
 
         lineaInferiorIzquierda.setEndY(Y);
         lineaInferiorIzquierda.setStroke(Color.BLACK);
