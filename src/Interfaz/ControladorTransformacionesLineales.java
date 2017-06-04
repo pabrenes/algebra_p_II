@@ -7,7 +7,10 @@ import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -18,9 +21,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import javax.tools.Tool;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -86,6 +91,9 @@ public class ControladorTransformacionesLineales implements Initializable{
     @FXML
     public Label labelYActual;
 
+    @FXML
+    public Button btnVolver;
+
 
     private static final double TAMANO_MAXIMO_PLANO = 380; // Tamanno maximo en pixeles de los panes, se asume que los
                                                         // panes son cuadrados.
@@ -129,37 +137,40 @@ public class ControladorTransformacionesLineales implements Initializable{
         dibujarPlano(paneInferiorIzquierdo);
         dibujarPlano(paneInferiorDerecho);
 
-        botonCalcularGraficar.setOnAction(event -> {
-            obtenerEntradas();
-            calcularTransformaciones();
-            escala = determinarEscala();
-            segmentacion = determinarSegmentacion();
+        botonCalcularGraficar.setOnAction(event -> configBtnCalcular());
+        btnVolver.setOnAction(event -> volver());
+    }
 
-            labelUnidad.setText("Escala: " + escala + "     Segmentos: " + segmentacion);
+    private void configBtnCalcular() {
+        obtenerEntradas();
+        calcularTransformaciones();
+        escala = determinarEscala();
+        segmentacion = determinarSegmentacion();
 
-            limpiarPlanos();
-            dibujarPlano(paneSuperiorIzquierdo);
-            dibujarPlano(paneSuperiorDerecho);
-            dibujarPlano(paneInferiorIzquierdo);
-            dibujarPlano(paneInferiorDerecho);
+        labelUnidad.setText("Escala: " + escala + "     Segmentos: " + segmentacion);
 
-            dibujarVector(vectorU[0], vectorU[1], paneSuperiorIzquierdo, Color.RED);
-            dibujarVector(vectorV[0], vectorV[1], paneSuperiorIzquierdo, Color.GREEN);
+        limpiarPlanos();
+        dibujarPlano(paneSuperiorIzquierdo);
+        dibujarPlano(paneSuperiorDerecho);
+        dibujarPlano(paneInferiorIzquierdo);
+        dibujarPlano(paneInferiorDerecho);
 
-            dibujarVector(transU[0], transU[1], paneSuperiorDerecho, Color.RED);
-            dibujarVector(transV[0], transV[1], paneSuperiorDerecho, Color.GREEN);
+        dibujarVector(vectorU[0], vectorU[1], paneSuperiorIzquierdo, Color.RED);
+        dibujarVector(vectorV[0], vectorV[1], paneSuperiorIzquierdo, Color.GREEN);
 
-            dibujarVector(alfaU[0], alfaU[1], paneInferiorIzquierdo, Color.RED);
-            dibujarVector(betaV[0], betaV[1], paneInferiorIzquierdo, Color.GREEN);
-            dibujarVector(alfaU_BetaV[0], alfaU_BetaV[1], paneInferiorIzquierdo, Color.BLUE);
+        dibujarVector(transU[0], transU[1], paneSuperiorDerecho, Color.RED);
+        dibujarVector(transV[0], transV[1], paneSuperiorDerecho, Color.GREEN);
 
-            dibujarVector(transAlfaU[0], transAlfaU[1], paneInferiorDerecho, Color.RED);
-            dibujarVector(transBetaV[0], transBetaV[1], paneInferiorDerecho, Color.GREEN);
-            dibujarVector(transAlfaU_BetaV[0], transAlfaU_BetaV[1], paneInferiorDerecho, Color.BLUE);
+        dibujarVector(alfaU[0], alfaU[1], paneInferiorIzquierdo, Color.RED);
+        dibujarVector(betaV[0], betaV[1], paneInferiorIzquierdo, Color.GREEN);
+        dibujarVector(alfaU_BetaV[0], alfaU_BetaV[1], paneInferiorIzquierdo, Color.BLUE);
 
-            iniciarAnimacion(alfaU, alfaU_BetaV, betaV, paneInferiorIzquierdo);
-            iniciarAnimacion(transAlfaU, transAlfaU_BetaV, transBetaV, paneInferiorDerecho);
-        });
+        dibujarVector(transAlfaU[0], transAlfaU[1], paneInferiorDerecho, Color.RED);
+        dibujarVector(transBetaV[0], transBetaV[1], paneInferiorDerecho, Color.GREEN);
+        dibujarVector(transAlfaU_BetaV[0], transAlfaU_BetaV[1], paneInferiorDerecho, Color.BLUE);
+
+        iniciarAnimacion(alfaU, alfaU_BetaV, betaV, paneInferiorIzquierdo);
+        iniciarAnimacion(transAlfaU, transAlfaU_BetaV, transBetaV, paneInferiorDerecho);
     }
 
     private void dibujarPlano(Pane grafica){
@@ -263,8 +274,6 @@ public class ControladorTransformacionesLineales implements Initializable{
         else
             return 360 - temp;
     }
-
-    //private double[]
 
     private static double determinarCoordenadas(double y){
         return Math.round(((y - EQUIVALENTE_CERO) * ((segmentacion / 2) * escala)) / EQUIVALENTE_CERO);
@@ -407,7 +416,7 @@ public class ControladorTransformacionesLineales implements Initializable{
         limitarEntrada(entradaT22,longitudMaxima);
     }
 
-    public static void limitarEntrada(final TextField textField, final int longitudMaxima) {
+    static void limitarEntrada(final TextField textField, final int longitudMaxima) {
         //Tamanno
         textField.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -440,6 +449,23 @@ public class ControladorTransformacionesLineales implements Initializable{
                 }
             }
         });
+    }
+
+    private void volver() {
+        Stage escenario = new Stage();
+        FXMLLoader loader = new FXMLLoader();
+        Parent raiz;                                                                                                    //Se crean estos tres objetos
+        try {
+            raiz = loader.load(getClass().getResource("Inicio.fxml").openStream());                                 //Con esto se indica el FXML de la nueva ventana
+            escenario.setTitle("Bases y dimensión de un sistema homogéneo de ecuaciones lineales");
+            escenario.setScene(new Scene(raiz));
+            escenario.show();
+
+            Stage temporal = (Stage) btnVolver.getScene().getWindow();                                                      //Se obtiene el stage al que pertenece el boton que abre la nueva ventana para poder cerrarla
+            temporal.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

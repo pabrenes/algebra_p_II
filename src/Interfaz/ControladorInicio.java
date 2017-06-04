@@ -15,32 +15,33 @@ import java.util.ResourceBundle;
 
 public class ControladorInicio implements Initializable {
     @FXML
-    public Button btn1;
+    public Button btnSoluciones;
     @FXML
-    public Button btn2;
+    public Button btnTransformaciones;
     @FXML
-    public Button btn3;
+    public Button btnImagenes;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        btn1.setOnAction(event -> abrirVentanaBases());
+        btnSoluciones.setOnAction(event -> abrirVentana("SistemasEcuaciones.fxml",
+                "Bases y dimensión del espacio de solución de un sistema homogéneo de ecuaciones lineales."));
+        btnTransformaciones.setOnAction(event -> abrirVentana("TransformacionesLineales.fxml",
+                "Visualización de vectores y transformaciones lineales"));
     }
 
-    public void abrirVentanaBases(){
+    private void abrirVentana(String ventana, String title){
         Stage escenario = new Stage();
         FXMLLoader loader = new FXMLLoader();
-        Parent raiz = null;                                                                                             //Se crean estos tres objetos
+        Parent raiz;                                                                                                    //Se crean estos tres objetos
         try {
-            raiz = loader.load(getClass().getResource("SistemasEcuaciones.fxml").openStream());                   //Con esto se indica el FXML de la nueva ventana
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        ControladorSistemasEcuaciones controlador = (ControladorSistemasEcuaciones) loader.getController();             //Se instancia el controlador respectivo, se debe hacer un casting para que funcione.
-        escenario.setTitle("Bases y dimensión de un sistema homogéneo de ecuaciones lineales");
-        escenario.setScene(new Scene(raiz));
-        escenario.show();
+            raiz = loader.load(getClass().getResource(ventana).openStream());                                           //Con esto se indica el FXML de la nueva ventana
+            escenario.setTitle(title);
+            escenario.setScene(new Scene(raiz));
+            escenario.show();
 
-        Stage temporal = (Stage) btn1.getScene().getWindow();                                                           //Se obtiene el stage al que pertenece el boton que abre la nueva ventana para poder cerrarla
-        temporal.close();
+            Stage temporal = (Stage) btnSoluciones.getScene().getWindow();                                              //Se obtiene el stage al que pertenece el boton que abre la nueva ventana para poder cerrarla
+            temporal.close();
+        } catch (IOException ignored) {
+        }
     }
 }

@@ -361,7 +361,7 @@ public class ControladorSistemasEcuaciones implements Initializable {
     private void volver() {
         Stage escenario = new Stage();
         FXMLLoader loader = new FXMLLoader();
-        Parent raiz;                                                                                             //Se crean estos tres objetos
+        Parent raiz;                                                                                                    //Se crean estos tres objetos
         try {
             raiz = loader.load(getClass().getResource("Inicio.fxml").openStream());                                 //Con esto se indica el FXML de la nueva ventana
             escenario.setTitle("Bases y dimensión de un sistema homogéneo de ecuaciones lineales");
