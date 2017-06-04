@@ -11,7 +11,7 @@
             <menus>
                 <Menu mnemonicParsing="false" text="Configuración">
                     <items>
-                        <Menu mnemonicParsing="false" text="Filas">
+                        <Menu mnemonicParsing="false" text="Ecuaciones">
                             <items>
                                 <MenuItem fx:id="menuItemF2" mnemonicParsing="false" text="2" />
                                 <MenuItem fx:id="menuItemF3" mnemonicParsing="false" text="3" />
@@ -19,7 +19,7 @@
                                 <MenuItem fx:id="menuItemF5" mnemonicParsing="false" text="5" />
                             </items>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="Columnas">
+                        <Menu mnemonicParsing="false" text="Variables">
                             <items>
                                 <MenuItem fx:id="menuItemC2" mnemonicParsing="false" text="2" />
                                 <MenuItem fx:id="menuItemC3" mnemonicParsing="false" text="3" />
