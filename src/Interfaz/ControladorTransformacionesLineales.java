@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -19,6 +20,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 
+import javax.tools.Tool;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -225,10 +227,9 @@ public class ControladorTransformacionesLineales implements Initializable{
         }
     }
 
-    private static Line dibujarVector(double x, double y, Pane plano, Color color){
-        double coordenadaX =  EQUIVALENTE_CERO + (EQUIVALENTE_CERO / (segmentacion / 2)) * (x / escala);
+    private static Line dibujarVector(double x, double y, Pane plano, Color color) {
+        double coordenadaX = EQUIVALENTE_CERO + (EQUIVALENTE_CERO / (segmentacion / 2)) * (x / escala);
         double coordenadaY = EQUIVALENTE_CERO - (EQUIVALENTE_CERO / (segmentacion / 2)) * (y / escala);
-
         Line lineaVector = new Line();
         plano.getChildren().addAll(lineaVector);
         lineaVector.setStartX(EQUIVALENTE_CERO);
@@ -237,25 +238,35 @@ public class ControladorTransformacionesLineales implements Initializable{
         lineaVector.setEndY(coordenadaY);
         lineaVector.setStrokeWidth(3.0f);
         lineaVector.setStroke(color);
-
-        Polygon trianguloVector = new Polygon();
-        trianguloVector.getPoints().addAll(
-                (coordenadaX - 10) * (coordenadaY / coordenadaX) , coordenadaY - 10,
-                coordenadaX - 10, coordenadaY + 10,
-                coordenadaX, coordenadaY
-                /*coordenadaX, coordenadaY,
-                coordenadaX + (-10 * ((x / Math.abs(x)))), coordenadaY,
-                coordenadaX, ((y / Math.abs(y)) * coordenadaY) + (10 * ((x / Math.abs(x))))*/
-        );
-        trianguloVector.setRotate(360 - (Math.cos(coordenadaX) * Math.sin(coordenadaY) * 360));
-        plano.getChildren().addAll(trianguloVector);
-
+        Tooltip tooltip = new Tooltip("(" + (int)x + ", " + (int)y + ")");
+        Tooltip.install(lineaVector, tooltip);
+        if (!color.equals(Color.MAGENTA)) {
+            Polygon trianguloVector = new Polygon();
+            trianguloVector.getPoints().addAll(
+                    coordenadaX - 6, coordenadaY - 10,
+                    coordenadaX - 6, coordenadaY + 10,
+                    coordenadaX + 4, coordenadaY
+            );
+            trianguloVector.setStroke(color);
+            trianguloVector.setFill(color);
+            trianguloVector.setRotate(getRotate(x, y));
+            Tooltip.install(trianguloVector, tooltip);
+            plano.getChildren().addAll(trianguloVector);
+        }
         return lineaVector;
+    }
+
+    private static double getRotate(double x, double y) {
+        double temp = Math.atan2(y, x) * 180 / Math.PI;
+        if (temp < 0)
+            return Math.abs(temp);
+        else
+            return 360 - temp;
     }
 
     //private double[]
 
-    private double determinarCoordenadas(double y){
+    private static double determinarCoordenadas(double y){
         return Math.round(((y - EQUIVALENTE_CERO) * ((segmentacion / 2) * escala)) / EQUIVALENTE_CERO);
     }
 
