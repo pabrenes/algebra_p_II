@@ -16,16 +16,10 @@ import java.util.ResourceBundle;
  * 27 may 2017.
  */
 public class Main extends Application {
-    @FXML
-    public Button btn1;
-    @FXML
-    public Button btn2;
-    @FXML
-    public Button btn3;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("TransformacionesLineales.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("Inicio.fxml"));
         primaryStage.setTitle("Tarea Programada 2 - Álgebra Lineal para Computación");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
