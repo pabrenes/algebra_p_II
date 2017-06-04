@@ -22,13 +22,7 @@
          <children>
             <Pane fx:id="paneSuperiorIzquierdo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="395.0" prefWidth="395.0">
                <children>
-                  <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="395.0" prefWidth="395.0">
-                     <children>
-                        <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="55.0" />
-                        <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="395.0" />
-                        <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="55.0" />
-                     </children>
-                  </VBox>
+                  <Label layoutX="14.0" layoutY="6.0" text="Vectores u y v" />
                </children></Pane>
             <Pane fx:id="paneSuperiorDerecho" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                <children>
@@ -49,7 +43,7 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </opaqueInsets>
       </GridPane>
-      <VBox alignment="CENTER" layoutX="826.0" layoutY="65.0" prefHeight="678.0" prefWidth="227.0" spacing="30.0">
+      <VBox fx:id="labelsInferiorDerecho" alignment="CENTER" layoutX="826.0" layoutY="91.0" prefHeight="652.0" prefWidth="227.0" spacing="30.0">
          <children>
             <HBox alignment="CENTER">
                <children>
@@ -163,6 +157,12 @@
             <Button fx:id="botonCalcularGraficar" mnemonicParsing="false" text="Calcular y Graficar" />
          </children>
       </VBox>
-      <Label layoutX="814.0" layoutY="14.0" prefHeight="17.0" prefWidth="176.0" text="Valor Unidad: X" />
+      <VBox layoutX="826.0" layoutY="14.0" prefHeight="51.0" prefWidth="227.0">
+         <children>
+            <Label fx:id="labelUnidad" layoutX="814.0" layoutY="14.0" prefHeight="17.0" prefWidth="226.0" text="Valor Unidad:       Segmentos:" />
+            <Label fx:id="labelXActual" layoutX="812.0" layoutY="31.0" prefHeight="17.0" prefWidth="217.0" text="X: " />
+            <Label fx:id="labelYActual" layoutX="814.0" layoutY="48.0" prefHeight="17.0" prefWidth="217.0" text="Y:" />
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

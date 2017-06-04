@@ -9,10 +9,14 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -71,6 +75,15 @@ public class ControladorTransformacionesLineales implements Initializable{
     @FXML
     public TextField entradaT22;
 
+    @FXML
+    public Label labelUnidad;
+
+    @FXML
+    public Label labelXActual;
+
+    @FXML
+    public Label labelYActual;
+
 
     private static final double TAMANO_MAXIMO_PLANO = 380; // Tamanno maximo en pixeles de los panes, se asume que los
                                                         // panes son cuadrados.
@@ -120,8 +133,7 @@ public class ControladorTransformacionesLineales implements Initializable{
             escala = determinarEscala();
             segmentacion = determinarSegmentacion();
 
-            System.out.print("Escala: "); //TODO Debug, remover despues
-            System.out.println(escala);
+            labelUnidad.setText("Escala: " + escala + "     Segmentos: " + segmentacion);
 
             limpiarPlanos();
             dibujarPlano(paneSuperiorIzquierdo);
@@ -200,23 +212,52 @@ public class ControladorTransformacionesLineales implements Initializable{
             lineaHorizontal.setEndX(TAMANO_MAXIMO_PLANO);
             lineaHorizontal.setEndY(i);
             lineaHorizontal.setStroke(Color.GREY);
+
+            lineaHorizontal.setOnMouseEntered(event -> {
+                labelXActual.setText("X:");
+                labelYActual.setText("Y: " + (-1 * determinarCoordenadas(lineaHorizontal.getEndY())));
+            });
+
+            lineaVertical.setOnMouseEntered(event -> {
+                labelXActual.setText("X: " + determinarCoordenadas(lineaVertical.getEndX()));
+                labelYActual.setText("Y:");
+            });
         }
     }
 
     private static Line dibujarVector(double x, double y, Pane plano, Color color){
+        double coordenadaX =  EQUIVALENTE_CERO + (EQUIVALENTE_CERO / (segmentacion / 2)) * (x / escala);
+        double coordenadaY = EQUIVALENTE_CERO - (EQUIVALENTE_CERO / (segmentacion / 2)) * (y / escala);
+
         Line lineaVector = new Line();
         plano.getChildren().addAll(lineaVector);
         lineaVector.setStartX(EQUIVALENTE_CERO);
         lineaVector.setStartY(EQUIVALENTE_CERO);
-        lineaVector.setEndX(EQUIVALENTE_CERO + (EQUIVALENTE_CERO / (segmentacion / 2)) * (x / escala));
-        lineaVector.setEndY(EQUIVALENTE_CERO - (EQUIVALENTE_CERO / (segmentacion / 2)) * (y / escala));
+        lineaVector.setEndX(coordenadaX);
+        lineaVector.setEndY(coordenadaY);
         lineaVector.setStrokeWidth(3.0f);
         lineaVector.setStroke(color);
+
+        Polygon trianguloVector = new Polygon();
+        trianguloVector.getPoints().addAll(
+                (coordenadaX - 10) * (coordenadaY / coordenadaX) , coordenadaY - 10,
+                coordenadaX - 10, coordenadaY + 10,
+                coordenadaX, coordenadaY
+                /*coordenadaX, coordenadaY,
+                coordenadaX + (-10 * ((x / Math.abs(x)))), coordenadaY,
+                coordenadaX, ((y / Math.abs(y)) * coordenadaY) + (10 * ((x / Math.abs(x))))*/
+        );
+        trianguloVector.setRotate(360 - (Math.cos(coordenadaX) * Math.sin(coordenadaY) * 360));
+        plano.getChildren().addAll(trianguloVector);
 
         return lineaVector;
     }
 
+    //private double[]
 
+    private double determinarCoordenadas(double y){
+        return Math.round(((y - EQUIVALENTE_CERO) * ((segmentacion / 2) * escala)) / EQUIVALENTE_CERO);
+    }
 
     private void iniciarAnimacion(int[] vectorU, int[] vectorU_V, int[] vectorV, Pane grafico){
         Line lineaU = dibujarVector(vectorU[0], vectorU[1],grafico, Color.RED);
