@@ -29,7 +29,7 @@ public class ControladorInicio implements Initializable {
                 "Visualización de vectores y transformaciones lineales"));
     }
 
-    private void abrirVentana(String ventana, String title){
+    private void abrirVentana(String ventana, String title) {
         Stage escenario = new Stage();
         FXMLLoader loader = new FXMLLoader();
         Parent raiz;                                                                                                    //Se crean estos tres objetos

@@ -36,7 +36,7 @@ import java.util.ResourceBundle;
  */
 
 
-public class ControladorTransformacionesLineales implements Initializable{
+public class ControladorTransformacionesLineales implements Initializable {
     @FXML
     public Pane paneSuperiorIzquierdo;
 
@@ -96,7 +96,7 @@ public class ControladorTransformacionesLineales implements Initializable{
 
 
     private static final double TAMANO_MAXIMO_PLANO = 380; // Tamanno maximo en pixeles de los panes, se asume que los
-                                                        // panes son cuadrados.
+    // panes son cuadrados.
     private static final double EQUIVALENTE_CERO = TAMANO_MAXIMO_PLANO / 2;
 
     private static double escala = 1;
@@ -105,22 +105,22 @@ public class ControladorTransformacionesLineales implements Initializable{
     private int[] vectorU = {0, 0};
     private int[] vectorV = {0, 0};
 
-    private int[] transU = {0,0};
-    private int[] transV = {0,0};
+    private int[] transU = {0, 0};
+    private int[] transV = {0, 0};
 
-    private int[] alfaU = {0,0};
-    private int[] betaV = {0,0};
-    private int[] alfaU_BetaV = {0,0};
+    private int[] alfaU = {0, 0};
+    private int[] betaV = {0, 0};
+    private int[] alfaU_BetaV = {0, 0};
 
-    private int[] transAlfaU = {0,0};
-    private int[] transBetaV = {0,0};
-    private int[] transAlfaU_BetaV = {0,0};
+    private int[] transAlfaU = {0, 0};
+    private int[] transBetaV = {0, 0};
+    private int[] transAlfaU_BetaV = {0, 0};
 
     private int alfa;
     private int beta;
 
     private int[][] matrizTransformacionLineal = {{1, 0},
-                                                  {0, 1}};
+            {0, 1}};
 
     /**
      * Función que se autoejecuta en la creación de esta pantalla
@@ -173,7 +173,7 @@ public class ControladorTransformacionesLineales implements Initializable{
         iniciarAnimacion(transAlfaU, transAlfaU_BetaV, transBetaV, paneInferiorDerecho);
     }
 
-    private void dibujarPlano(Pane grafica){
+    private void dibujarPlano(Pane grafica) {
         dibujarEjesSecundarios(grafica);
         dibujarEjesXY(grafica);
     }
@@ -183,7 +183,7 @@ public class ControladorTransformacionesLineales implements Initializable{
      *
      * @param grafica Pane sobre el cual se dibujaran los ejes
      */
-    private void dibujarEjesXY(Pane grafica){
+    private void dibujarEjesXY(Pane grafica) {
         Line ejeX = new Line();
         grafica.getChildren().addAll(ejeX);
         ejeX.setStartX(0.0f);
@@ -208,8 +208,8 @@ public class ControladorTransformacionesLineales implements Initializable{
      *
      * @param grafica Pane sobre el cual se dibujaran los ejes
      */
-    private void dibujarEjesSecundarios(Pane grafica){
-        for(double i = 0; i <= TAMANO_MAXIMO_PLANO; i += (TAMANO_MAXIMO_PLANO / segmentacion)){
+    private void dibujarEjesSecundarios(Pane grafica) {
+        for (double i = 0; i <= TAMANO_MAXIMO_PLANO; i += (TAMANO_MAXIMO_PLANO / segmentacion)) {
             Line lineaVertical = new Line();
             grafica.getChildren().addAll(lineaVertical);
             lineaVertical.setStartX(i);
@@ -249,7 +249,7 @@ public class ControladorTransformacionesLineales implements Initializable{
         lineaVector.setEndY(coordenadaY);
         lineaVector.setStrokeWidth(3.0f);
         lineaVector.setStroke(color);
-        Tooltip tooltip = new Tooltip("(" + (int)x + ", " + (int)y + ")");
+        Tooltip tooltip = new Tooltip("(" + (int) x + ", " + (int) y + ")");
         Tooltip.install(lineaVector, tooltip);
         if (!color.equals(Color.MAGENTA)) {
             Polygon trianguloVector = new Polygon();
@@ -275,12 +275,12 @@ public class ControladorTransformacionesLineales implements Initializable{
             return 360 - temp;
     }
 
-    private static double determinarCoordenadas(double y){
+    private static double determinarCoordenadas(double y) {
         return Math.round(((y - EQUIVALENTE_CERO) * ((segmentacion / 2) * escala)) / EQUIVALENTE_CERO);
     }
 
-    private void iniciarAnimacion(int[] vectorU, int[] vectorU_V, int[] vectorV, Pane grafico){
-        Line lineaU = dibujarVector(vectorU[0], vectorU[1],grafico, Color.RED);
+    private void iniciarAnimacion(int[] vectorU, int[] vectorU_V, int[] vectorV, Pane grafico) {
+        Line lineaU = dibujarVector(vectorU[0], vectorU[1], grafico, Color.RED);
         Line lineaU_V = dibujarVector(vectorU_V[0], vectorU_V[1], grafico, Color.BLUE);
         Line lineaFantasma = dibujarVector(vectorV[0], vectorV[1], grafico, Color.MAGENTA);
 
@@ -306,18 +306,18 @@ public class ControladorTransformacionesLineales implements Initializable{
         timeline.play();
     }
 
-    private void limpiarPlanos(){
+    private void limpiarPlanos() {
         limpiarPlano(paneSuperiorIzquierdo);
         limpiarPlano(paneSuperiorDerecho);
         limpiarPlano(paneInferiorIzquierdo);
         limpiarPlano(paneInferiorDerecho);
     }
 
-    private void limpiarPlano(Pane cuadro){
+    private void limpiarPlano(Pane cuadro) {
         cuadro.getChildren().remove(1, cuadro.getChildren().size());
     }
 
-    private void obtenerEntradas(){
+    private void obtenerEntradas() {
         alfa = Integer.parseInt(entradaAlfa.getText());
         beta = Integer.parseInt(entradaBeta.getText());
 
@@ -333,7 +333,7 @@ public class ControladorTransformacionesLineales implements Initializable{
         matrizTransformacionLineal[1][1] = Integer.parseInt(entradaT22.getText());
     }
 
-    private void calcularTransformaciones(){
+    private void calcularTransformaciones() {
         transU = TransformacionLineal.hacerTransformacionLineal(matrizTransformacionLineal, vectorU);
         transV = TransformacionLineal.hacerTransformacionLineal(matrizTransformacionLineal, vectorV);
 
@@ -361,20 +361,20 @@ public class ControladorTransformacionesLineales implements Initializable{
         return Math.pow(10, (int) Math.log10(determinarMayor()));
     }
 
-    private int determinarSegmentacion(){
+    private int determinarSegmentacion() {
         int mayor = determinarMayor();
         return 2 * ((int) (mayor / escala) + 1);
     }
 
-    private int determinarMayor(){
+    private int determinarMayor() {
         ArrayList<int[]> matrizVectores = hacerMatrizVectores();
 
         int mayor = 0;
 
-        for(int i = 0; i < 10; i++){
-            for(int j = 0; j < 2; j++){
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 2; j++) {
                 System.out.println(matrizVectores.get(i)[j]);
-                if(Math.abs(matrizVectores.get(i)[j]) > mayor){
+                if (Math.abs(matrizVectores.get(i)[j]) > mayor) {
                     mayor = Math.abs(matrizVectores.get(i)[j]);
                 }
             }
@@ -382,7 +382,7 @@ public class ControladorTransformacionesLineales implements Initializable{
         return mayor;
     }
 
-    private ArrayList<int[]> hacerMatrizVectores(){
+    private ArrayList<int[]> hacerMatrizVectores() {
         ArrayList<int[]> matrizVectores = new ArrayList<>();
         matrizVectores.add(vectorU);
         matrizVectores.add(vectorV);
@@ -401,19 +401,19 @@ public class ControladorTransformacionesLineales implements Initializable{
         return matrizVectores;
     }
 
-    private void hacerEntradasNumericas(){
+    private void hacerEntradasNumericas() {
         int longitudMaxima = 3;
 
-        limitarEntrada(entradaAlfa,longitudMaxima);
-        limitarEntrada(entradaBeta,longitudMaxima);
-        limitarEntrada(entradaU1,longitudMaxima);
+        limitarEntrada(entradaAlfa, longitudMaxima);
+        limitarEntrada(entradaBeta, longitudMaxima);
+        limitarEntrada(entradaU1, longitudMaxima);
         limitarEntrada(entradaU2, longitudMaxima);
-        limitarEntrada(entradaV1,longitudMaxima);
-        limitarEntrada(entradaV2,longitudMaxima);
-        limitarEntrada(entradaT11,longitudMaxima);
-        limitarEntrada(entradaT12,longitudMaxima);
-        limitarEntrada(entradaT21,longitudMaxima);
-        limitarEntrada(entradaT22,longitudMaxima);
+        limitarEntrada(entradaV1, longitudMaxima);
+        limitarEntrada(entradaV2, longitudMaxima);
+        limitarEntrada(entradaT11, longitudMaxima);
+        limitarEntrada(entradaT12, longitudMaxima);
+        limitarEntrada(entradaT21, longitudMaxima);
+        limitarEntrada(entradaT22, longitudMaxima);
     }
 
     static void limitarEntrada(final TextField textField, final int longitudMaxima) {
@@ -437,10 +437,10 @@ public class ControladorTransformacionesLineales implements Initializable{
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 try {
-                    if(!newValue.equals("") & !newValue.equals("-")){
+                    if (!newValue.equals("") & !newValue.equals("-")) {
                         int numero = Math.abs(Integer.parseInt(newValue));
 
-                        if((Math.log10(numero) + 1) >= longitudMaxima){
+                        if ((Math.log10(numero) + 1) >= longitudMaxima) {
                             textField.setText(oldValue);
                         }
                     }
