@@ -20,9 +20,15 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Pane fx:id="paneSuperiorIzquierdo" prefHeight="200.0" prefWidth="200.0">
+            <Pane fx:id="paneSuperiorIzquierdo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="395.0" prefWidth="395.0">
                <children>
-                  <Label layoutX="14.0" layoutY="6.0" text="Vectores u y v" />
+                  <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="395.0" prefWidth="395.0">
+                     <children>
+                        <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="55.0" />
+                        <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="395.0" />
+                        <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="55.0" />
+                     </children>
+                  </VBox>
                </children></Pane>
             <Pane fx:id="paneSuperiorDerecho" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                <children>

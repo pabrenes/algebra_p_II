@@ -355,7 +355,7 @@ public class ControladorTransformacionesLineales implements Initializable{
         limitarEntrada(entradaT22,longitudMaxima);
     }
 
-    private static void limitarEntrada(final TextField textField, final int longitudMaxima) {
+    public static void limitarEntrada(final TextField textField, final int longitudMaxima) {
         //Tamanno
         textField.textProperty().addListener(new ChangeListener<String>() {
             @Override
