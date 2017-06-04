@@ -25,10 +25,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("SistemasEcuaciones.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("Inicio.fxml"));
         primaryStage.setTitle("Tarea Programada 2 - Álgebra Lineal para Computación");
         primaryStage.setScene(new Scene(root));
-        //primaryStage.setResizable(false);
         primaryStage.show();
     }
 
