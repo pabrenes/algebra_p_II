@@ -67,10 +67,12 @@ public class ControladorTransformacionesLineales implements Initializable{
     @FXML
     public TextField entradaT22;
 
-    private static final int TAMANO_MAXIMO_PLANO = 340; // Tamanno maximo en pixeles de los panes, se asume que los
+    private static final int TAMANO_MAXIMO_PLANO = 380; // Tamanno maximo en pixeles de los panes, se asume que los
                                                         // panes son cuadrados.
-    private double escala;
+    private static final int EQUIVALENTE_CERO = TAMANO_MAXIMO_PLANO / 2;
 
+    private double escala = 1;
+    private int segmentacion = 1;
 
     private int[] vectorU = {0, 0};
     private int[] vectorV = {0, 0};
@@ -92,6 +94,7 @@ public class ControladorTransformacionesLineales implements Initializable{
     private int[][] matrizTransformacionLineal = {{1, 0},
                                                   {0, 1}};
 
+
     /**
      * Función que se autoejecuta en la creación de esta pantalla
      *
@@ -100,9 +103,6 @@ public class ControladorTransformacionesLineales implements Initializable{
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        float x = 5.3f;
-        float y = -2.0f;
-
         hacerEntradasNumericas();
 
         dibujarPlano(paneSuperiorIzquierdo);
@@ -114,9 +114,16 @@ public class ControladorTransformacionesLineales implements Initializable{
             obtenerEntradas();
             calcularTransformaciones();
             escala = determinarEscala();
+            segmentacion = determinarSegmentacion();
 
             System.out.print("Escala: "); //TODO Debug, remover despues
             System.out.println(escala);
+
+            limpiarPlanos();
+            dibujarPlano(paneSuperiorIzquierdo);
+            dibujarPlano(paneSuperiorDerecho);
+            dibujarPlano(paneInferiorIzquierdo);
+            dibujarPlano(paneInferiorDerecho);
 
             dibujarVector(vectorU[0], vectorU[1], paneSuperiorIzquierdo, Color.RED);
             dibujarVector(vectorV[0], vectorV[1], paneSuperiorIzquierdo, Color.GREEN);
@@ -145,13 +152,43 @@ public class ControladorTransformacionesLineales implements Initializable{
         //paneSuperiorIzquierdo.getChildren().addAll(lineaPrueba);*/
     }
 
+    private void dibujarPlano(Pane grafica){
+        dibujarEjesSecundarios(grafica);
+        dibujarEjesXY(grafica);
+    }
+
     /**
-     * Dibuja los ejes principales y secundarios de un plano cartesiano sobre el pane ingresado
+     * Dibuja los ejes principales X y Y sobre el centro del pane ingresado.
      *
      * @param grafica Pane sobre el cual se dibujaran los ejes
      */
-    private void dibujarPlano(Pane grafica){
-        for(int i = 0; i <= TAMANO_MAXIMO_PLANO; i += (TAMANO_MAXIMO_PLANO / 20)){
+    private void dibujarEjesXY(Pane grafica){
+        Line ejeX = new Line();
+        grafica.getChildren().addAll(ejeX);
+        ejeX.setStartX(0.0f);
+        ejeX.setStartY(EQUIVALENTE_CERO);
+        ejeX.setEndX(TAMANO_MAXIMO_PLANO);
+        ejeX.setEndY(EQUIVALENTE_CERO);
+        ejeX.setStroke(Color.BLACK);
+        ejeX.setStrokeWidth(3.0);
+
+        Line ejeY = new Line();
+        grafica.getChildren().addAll(ejeY);
+        ejeY.setStartX(EQUIVALENTE_CERO);
+        ejeY.setStartY(0.0f);
+        ejeY.setEndX(EQUIVALENTE_CERO);
+        ejeY.setEndY(TAMANO_MAXIMO_PLANO);
+        ejeY.setStroke(Color.BLACK);
+        ejeY.setStrokeWidth(3.0);
+    }
+
+    /**
+     * Dibuja los ejes secundarios de un plano cartesiano sobre el pane ingresado.
+     *
+     * @param grafica Pane sobre el cual se dibujaran los ejes
+     */
+    private void dibujarEjesSecundarios(Pane grafica){
+        for(int i = 0; i <= TAMANO_MAXIMO_PLANO; i += (TAMANO_MAXIMO_PLANO / segmentacion)){
             Line lineaVertical = new Line();
             grafica.getChildren().addAll(lineaVertical);
             lineaVertical.setStartX(i);
@@ -167,27 +204,33 @@ public class ControladorTransformacionesLineales implements Initializable{
             lineaHorizontal.setEndX(TAMANO_MAXIMO_PLANO);
             lineaHorizontal.setEndY(i);
             lineaHorizontal.setStroke(Color.GREY);
-
-            if(i == TAMANO_MAXIMO_PLANO / 2){
-                lineaVertical.setStrokeWidth(3.0);
-                lineaHorizontal.setStrokeWidth(3.0);
-                lineaVertical.setStroke(Color.BLACK);
-                lineaHorizontal.setStroke(Color.BLACK);
-            }
         }
     }
+
+
 
     private Line dibujarVector(int x, int y, Pane plano, Color color){
         Line lineaVector = new Line();
         plano.getChildren().addAll(lineaVector);
-        lineaVector.setStartX(170.0f);
-        lineaVector.setStartY(170.0f);
-        lineaVector.setEndX(170.0f + 17 * (x / escala));
-        lineaVector.setEndY(170.0f - 17 * (y / escala));
+        lineaVector.setStartX(EQUIVALENTE_CERO);
+        lineaVector.setStartY(EQUIVALENTE_CERO);
+        lineaVector.setEndX(EQUIVALENTE_CERO + (EQUIVALENTE_CERO / (segmentacion / 2)) * (x / escala));
+        lineaVector.setEndY(EQUIVALENTE_CERO - (EQUIVALENTE_CERO / (segmentacion / 2)) * (y / escala));
         lineaVector.setStrokeWidth(3.0f);
         lineaVector.setStroke(color);
 
         return lineaVector;
+    }
+
+    private void limpiarPlanos(){
+        limpiarPlano(paneSuperiorIzquierdo);
+        limpiarPlano(paneSuperiorDerecho);
+        limpiarPlano(paneInferiorIzquierdo);
+        limpiarPlano(paneInferiorDerecho);
+    }
+
+    private void limpiarPlano(Pane cuadro){
+        cuadro.getChildren().remove(1,cuadro.getChildren().size());
     }
 
     private void obtenerEntradas(){
@@ -219,8 +262,24 @@ public class ControladorTransformacionesLineales implements Initializable{
         transAlfaU_BetaV = TransformacionLineal.hacerTransformacionLineal(matrizTransformacionLineal, alfaU_BetaV);
     }
 
-    private double determinarEscala(){
-        return Math.pow(10, (int) Math.log10(determinarMayor())); //Esta la hizo Tono
+    private double determinarEscala() {
+        /*int mayor = determinarMayor();
+        int escalaActual = 10;
+        while (true){
+            if(mayor<escalaActual){
+                break;
+            }
+            else{
+                escalaActual += 10;
+            }
+        }
+        return escalaActual / 10;*/
+        return Math.pow(10, (int) Math.log10(determinarMayor()));
+    }
+
+    private int determinarSegmentacion(){
+        int mayor = determinarMayor();
+        return 2 * ((int) (mayor / escala) + 1);
     }
 
     private int determinarMayor(){
@@ -231,8 +290,8 @@ public class ControladorTransformacionesLineales implements Initializable{
         for(int i = 0; i < 10; i++){
             for(int j = 0; j < 2; j++){
                 System.out.println(matrizVectores.get(i)[j]);
-                if(matrizVectores.get(i)[j] > mayor){
-                    mayor = matrizVectores.get(i)[j];
+                if(Math.abs(matrizVectores.get(i)[j]) > mayor){
+                    mayor = Math.abs(matrizVectores.get(i)[j]);
                 }
             }
         }
@@ -260,19 +319,21 @@ public class ControladorTransformacionesLineales implements Initializable{
     }
 
     private void hacerEntradasNumericas(){
-        limitarEntrada(entradaAlfa,2);
-        limitarEntrada(entradaBeta,2);
-        limitarEntrada(entradaU1,2);
-        limitarEntrada(entradaU2, 2);
-        limitarEntrada(entradaV1,2);
-        limitarEntrada(entradaV2,2);
-        limitarEntrada(entradaT11,2);
-        limitarEntrada(entradaT12,2);
-        limitarEntrada(entradaT21,2);
-        limitarEntrada(entradaT22,2);
+        int longitudMaxima = 3;
+        limitarEntrada(entradaAlfa,longitudMaxima);
+        limitarEntrada(entradaBeta,longitudMaxima);
+        limitarEntrada(entradaU1,longitudMaxima);
+        limitarEntrada(entradaU2, longitudMaxima);
+        limitarEntrada(entradaV1,longitudMaxima);
+        limitarEntrada(entradaV2,longitudMaxima);
+        limitarEntrada(entradaT11,longitudMaxima);
+        limitarEntrada(entradaT12,longitudMaxima);
+        limitarEntrada(entradaT21,longitudMaxima);
+        limitarEntrada(entradaT22,longitudMaxima);
     }
 
     public static void limitarEntrada(final TextField textField, final int longitudMaxima) {
+        //Tamanno
         textField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
@@ -287,14 +348,26 @@ public class ControladorTransformacionesLineales implements Initializable{
             }
         });
 
+        //Numericos
         textField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 try {
-                    if (!newValue.matches("\\d*")) {
-                        textField.setText(newValue.replaceAll("[^\\d]", ""));
+                    if(!newValue.equals("") & !newValue.equals("-")){
+                        int numero = Math.abs(Integer.parseInt(newValue));
+
+                        if((Math.log10(numero) + 1) >= 3){
+                            textField.setText(oldValue);
+                        }
                     }
+
+                    /*if(newValue.matches("-")){
+                        textField.setText("-");
+                    } else if (!newValue.matches("\\d*")) {
+                        textField.setText(newValue.replaceAll("[^\\d]", ""));
+                    }*/
                 } catch (Exception e) {
+                    textField.setText(oldValue);
                     //e.printStackTrace();
                 }
             }
