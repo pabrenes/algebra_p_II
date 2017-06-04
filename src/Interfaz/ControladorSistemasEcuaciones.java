@@ -480,7 +480,7 @@ public class ControladorSistemasEcuaciones implements Initializable {
         lineaSuperiorDerecha.setStartY(Y + 32 - YDES);
         lineaSuperiorDerecha.setEndX(X + XEND + XDES);
 
-        Y += ((dimension * CASILLA_ALTO) + -5 * (dimension - 5)) / 2 - YDES;
+        Y += ((columnas * CASILLA_ALTO) + -5 * (columnas - 5)) / 2 - YDES;
 
         lineaSuperiorIzquierda.setEndY(Y);
         lineaSuperiorIzquierda.setStroke(Color.BLACK);
@@ -532,7 +532,7 @@ public class ControladorSistemasEcuaciones implements Initializable {
         lineaInferiorDerecha.setStartY(Y + 32 - YDES);
         lineaInferiorDerecha.setEndX(X + XEND + XDES);
 
-        Y += ((dimension * CASILLA_ALTO) + -5 * (dimension - 5)) / 2 - YDES;
+        Y += ((columnas * CASILLA_ALTO) + -5 * (columnas - 5)) / 2 - YDES;
 
         lineaInferiorIzquierda.setEndY(Y);
         lineaInferiorIzquierda.setStroke(Color.BLACK);
