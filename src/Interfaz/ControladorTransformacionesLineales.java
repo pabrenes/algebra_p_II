@@ -15,16 +15,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import javax.tools.Tool;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -48,9 +45,6 @@ public class ControladorTransformacionesLineales implements Initializable {
 
     @FXML
     public Pane paneInferiorDerecho;
-
-    @FXML
-    public Button botonCalcularGraficar;
 
     @FXML
     public TextField entradaAlfa;
@@ -92,11 +86,14 @@ public class ControladorTransformacionesLineales implements Initializable {
     public Label labelYActual;
 
     @FXML
-    public Button btnVolver;
+    public Button botonVolver;
+
+    @FXML
+    public Button botonCalcularGraficar;
 
 
     private static final double TAMANO_MAXIMO_PLANO = 380; // Tamanno maximo en pixeles de los panes, se asume que los
-    // panes son cuadrados.
+                                                           // panes son cuadrados.
     private static final double EQUIVALENTE_CERO = TAMANO_MAXIMO_PLANO / 2;
 
     private static double escala = 1;
@@ -137,11 +134,15 @@ public class ControladorTransformacionesLineales implements Initializable {
         dibujarPlano(paneInferiorIzquierdo);
         dibujarPlano(paneInferiorDerecho);
 
-        botonCalcularGraficar.setOnAction(event -> configBtnCalcular());
-        btnVolver.setOnAction(event -> volver());
+        botonCalcularGraficar.setOnAction(event -> configBotonCalcular());
+        botonVolver.setOnAction(event -> volver());
     }
 
-    private void configBtnCalcular() {
+    /**
+     * Funcion que obtiene las entradas, calcula las transformaciones, determina la escala y la segmentacion para los
+     * vectores calculados y grafica todos los vectores con sus animaciones.
+     */
+    private void configBotonCalcular() {
         obtenerEntradas();
         calcularTransformaciones();
         escala = determinarEscala();
@@ -173,6 +174,12 @@ public class ControladorTransformacionesLineales implements Initializable {
         iniciarAnimacion(transAlfaU, transAlfaU_BetaV, transBetaV, paneInferiorDerecho);
     }
 
+
+    /**
+     * Dibuja un plano cartesiano completo sobre la grafica dada.
+     *
+     * @param grafica
+     */
     private void dibujarPlano(Pane grafica) {
         dibujarEjesSecundarios(grafica);
         dibujarEjesXY(grafica);
@@ -238,6 +245,17 @@ public class ControladorTransformacionesLineales implements Initializable {
         }
     }
 
+    /**
+     * Dibuja un vector del color ingresado desde (0,0) hasta (x,y) sobre la grafica dada. Se emplea un calculo para
+     * deterinar pasar de las coordenadas x,y dadas a las de JavaFX basado en el equivalente a cero en las coordenadas
+     * del Pane, la segmentacion para los vectores dados y la escala que se esta empleando.
+     *
+     * @param x Coordenada X donde apunta el vector.
+     * @param y Coordenada Y donde apunta el vector.
+     * @param plano Grafica (JavaFX Pane) donde se dibuja el vector.
+     * @param color Color que tendra el vector.
+     * @return Referencia al objeto Line que dibuja el vector.
+     */
     private static Line dibujarVector(double x, double y, Pane plano, Color color) {
         double coordenadaX = EQUIVALENTE_CERO + (EQUIVALENTE_CERO / (segmentacion / 2)) * (x / escala);
         double coordenadaY = EQUIVALENTE_CERO - (EQUIVALENTE_CERO / (segmentacion / 2)) * (y / escala);
@@ -267,6 +285,13 @@ public class ControladorTransformacionesLineales implements Initializable {
         return lineaVector;
     }
 
+    /**
+     * Funcion que calcula la rotacion que deben tener los triangulos de cabeza de los vectores.
+     *
+     * @param x Coordenada X de uno de los vertices del triangulo
+     * @param y Coordenada Y de uno de los vertices del triangulo
+     * @return Rotacion en grados de las coordenadas
+     */
     private static double getRotate(double x, double y) {
         double temp = Math.atan2(y, x) * 180 / Math.PI;
         if (temp < 0)
@@ -275,10 +300,31 @@ public class ControladorTransformacionesLineales implements Initializable {
             return 360 - temp;
     }
 
+    /**
+     * Convierte el numero ingresado del sistema de coordenadas de JavaFX (Y) al sistema de coordenadas con planos
+     * cartesianos (x).
+     *
+     * @param y Imagen de X, donde X es una coordenada cartesiana y Y una coordenada en JavaFX
+     * @return Preimagen de Y
+     */
     private static double determinarCoordenadas(double y) {
         return Math.round(((y - EQUIVALENTE_CERO) * ((segmentacion / 2) * escala)) / EQUIVALENTE_CERO);
     }
 
+    /**
+     * Funcion que crea un vector fantasma animado con el siguiente desplazamiento:
+     *
+     * Su punto de inicio desde el punto de inicio del vector U
+     * hasta el punto de final del mismo vector
+     *
+     * Su punto de final desde el punto de inicio del
+     * vector V hasta el punto de final de la suma de u + v
+     *
+     * @param vectorU Vector u
+     * @param vectorU_V Suma de u u v
+     * @param vectorV Vector v
+     * @param grafico Pane sobre el cual se hara la animacion.
+     */
     private void iniciarAnimacion(int[] vectorU, int[] vectorU_V, int[] vectorV, Pane grafico) {
         Line lineaU = dibujarVector(vectorU[0], vectorU[1], grafico, Color.RED);
         Line lineaU_V = dibujarVector(vectorU_V[0], vectorU_V[1], grafico, Color.BLUE);
@@ -461,7 +507,7 @@ public class ControladorTransformacionesLineales implements Initializable {
             escenario.setScene(new Scene(raiz));
             escenario.show();
 
-            Stage temporal = (Stage) btnVolver.getScene().getWindow();                                                      //Se obtiene el stage al que pertenece el boton que abre la nueva ventana para poder cerrarla
+            Stage temporal = (Stage) botonVolver.getScene().getWindow();                                                      //Se obtiene el stage al que pertenece el boton que abre la nueva ventana para poder cerrarla
             temporal.close();
         } catch (IOException e) {
             e.printStackTrace();
