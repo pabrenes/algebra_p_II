@@ -13,8 +13,6 @@ public class ControladorInicio extends CambiarVentana implements Initializable {
     public Button btnSoluciones;
     @FXML
     public Button btnTransformaciones;
-    @FXML
-    public Button btnImagenes;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
